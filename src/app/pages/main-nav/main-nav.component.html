@@ -1,0 +1,11 @@
+<div class="wrapper">
+    <app-shellbar></app-shellbar>
+    <div style="display: flex; height:95%;">
+        <app-sidenav></app-sidenav>
+        <form class="container-fluid" name="myForm" flex layout="column" style="overflow: auto; height: auto;">
+            <div style="background-color: #f7f7f7; overflow: auto; height: auto;">
+                <router-outlet></router-outlet>
+            </div>
+        </form>
+    </div>
+</div>

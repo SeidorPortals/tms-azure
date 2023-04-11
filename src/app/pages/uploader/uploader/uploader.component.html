@@ -1,0 +1,35 @@
+<div class="row" style="height:95%;">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <div class="card card-user">
+        <div class="card-header">
+            <ui5-bar design="Driver">
+                <h3 class="card-title" slot="startContent">Uploader</h3>
+                <ui5-button icon="complete" tooltip="Save and Close" slot="endContent">Save and Close
+                </ui5-button>
+                <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true">Save
+                </ui5-button>
+                <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/uploader">Cancel
+                </ui5-button>
+            </ui5-bar>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="pb-1 pl-2" style="width: 50%;">
+                    <label for="Number">Document Type</label>
+                    <select class="custom-select input-fi" required type="number" [(ngModel)]="DocumentType">
+                        <option value="1">Carrier</option>
+                        <option value="2">Customer</option>
+                        <option value="3">Commodity</option>
+                        <option value="4">Driver</option>
+                        <option value="5">Trailer</option>
+                        <option value="6">Truck</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <app-upload-csv (actionGetFiles)="getFiles($event)"></app-upload-csv>
+            </div>
+        </div>
+    </div>
+</div>

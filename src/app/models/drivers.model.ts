@@ -1,0 +1,30 @@
+export class driversModel {
+    driverid           : string;
+    name               : string;
+    payeename          : string;
+    adress             : string;
+    city               : string ;
+	state              : string ;
+    zipcode            : string;
+	country            : string ;
+    phone              : string;
+    celularemail       : string;
+    email              : string;
+    phone2             : string;
+    birthDATE          : string;
+    socialsecurity     : string;
+    dirverlicense      : string;
+    licenseexpDATE     : string ;
+    medicalcardexpDATE : string;
+    anualreview        : string;
+    workstatusexpDATE  : string;
+    mvrexpDATE         : string;
+    hireDATE           : string;
+    primaryfuelcard    : string;
+    bonus              : Number;
+    terminationDATE    : string;
+    payrallaccount     : string;
+    drivertype         : Number;
+    statusid           : Number ;
+	notes              : string;
+  }

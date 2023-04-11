@@ -1,0 +1,209 @@
+<!-- <ui5-button icon="paper-plane" (click)="download()" tooltip="Descargar" slot="endContent">
+    Descargar
+</ui5-button> -->
+<div #template style="display:none;" class="contenido">
+    <table>
+        <tbody>
+            <tr style="border: 0px solid">
+                <td style="width: 80px; "> <img style="width: 50px;" [src]="logoBase64" >  </td>
+                <td style="width: 600px; text-align: center; margin: 0px 85px 0px 0px; ">
+                    <h4 style="font-size: 20px;"> <b> USA TRUCK BROKERS INC.  </b>  </h4> 
+                    <p style="font-size: 15px;"> <b> PHONE #:   </b> {{ model.phone }}  </p>
+                    <picture style="font-size: 15px;"> <b> FAX #:  </b> {{ model.fax }}  </picture>
+                    <h6 style="font-size: 15px;"> <b> RATE CONFIRMATION  </b>  </h6>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr style="border-top: 1px solid #adadad; border-right: 0px solid; border-left: 0px solid; border-bottom: 1px solid #adadad;">
+                <td style="width: 223px;"> 
+                    <p style="font-size: 14px;"> <b> Trip #:  </b> {{ model.trip }}   </p>
+                    <p style="font-size: 14px;"> <b> PickUp Rate #:  </b> {{ model.pickUpRate }}  </p>
+                    <p style="font-size: 14px;"> <b> Equipment  #:  </b>  {{ model.equipmenttype }}  </p>
+                </td>
+                <td style="width: 223px;">
+                    <p style="font-size: 14px;"> <b> Carrier:  </b> {{ model.carrier }}   </p>
+                    <p style="font-size: 14px;"> <b> Del. Date:  </b> {{ model.deliveryDate }}  </p>
+                    <p style="font-size: 14px;"> <b> Transport Type #:  </b>   {{ model.transportType }} </p>
+                    <p style="font-size: 14px;"> <b> Dispatcher/Driver Phone #:  </b> {{ model.dispatcherphone1 }}  </p>
+                </td>
+                <td style="width: 223px;"> 
+                    <p style="font-size: 14px;"> <b> Truck #:   </b> {{ model.truck }}  </p>
+                    <p style="font-size: 14px;"> <b> Driver:   </b>  {{ model.driver }} </p>
+                    <p style="font-size: 14px;"> <b> Temperature #:  </b> {{ model.temperature }} </p>
+                    <p style="font-size: 14px;"> <b> Trailer #:  </b> {{ model.trailer }}   </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr style="border-top: 0px solid ; border-right: 0px solid; border-left: 0px solid; border-bottom: 1px solid #adadad;">
+                <td style="width: 341px;"> 
+                    <p style="font-size: 14px;"> PickUP #1  </p>
+                    <p style="font-size: 14px;"> <b> Customer:   </b> {{ model.customer }}  </p>
+                    <p style="font-size: 14px;"> <b> Address #1:   </b> {{ model.pickUp != null ? model.pickUp.address1 : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Address #2:  </b> {{ model.pickUp != null ? model.pickUp.address2 : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> City: </b>  {{ model.pickUp != null ? model.pickUp.city : '' }} </p>
+                    <p style="font-size: 14px;"> <b> Zip Code:  </b> {{ model.pickUp != null ? model.pickUp.zipcode : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Phone:   </b> {{ model.pickUp != null ? model.pickUp.phone : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Commodity:  </b>  {{ model.pickUp != null ? model.pickUp.commodity : '' }}  </p>
+                </td>
+                <td style="width: 341px;">
+                    <p style="font-size: 14px; margin-top: 22px;"> <b> PickUp Date:  </b> {{ model.pickUp != null ? model.pickUp.pickUpDate : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> PickUp Time: </b>  {{ model.pickUp != null ? model.pickUp.pickUpTime : '' }}   </p>
+                    <p style="font-size: 14px;"> <b> PickUp Ref:   </b> {{ model.pickUp != null ? model.pickUp.pickUpRef : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Contact:   </b> {{ model.pickUp != null ? model.pickUp.contact : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> PCs/Weight (Lbs):  </b>  {{ model.pickUp != null ? model.pickUp.pcsweight : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Notes:   </b> {{ model.pickUp != null ? model.pickUp.notes : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Seal #:   </b> {{ model.pickUp != null ? model.pickUp.seal : '' }}  </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr style="border-top: 0px solid ; border-right: 0px solid; border-left: 0px solid; border-bottom: 1px solid #adadad;">
+                <td style="width: 341px;"> 
+                    <p style="font-size: 14px;"> Delivery #1  </p>
+                    <p style="font-size: 14px;"> <b> Customer:   </b> {{ model.customer }} </p>
+                    <p style="font-size: 14px;"> <b> Address #1:  </b> {{ model.delivery != null ? model.delivery.address1 : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Address #2:  </b> {{ model.delivery != null ? model.delivery.address2 : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> City: </b> {{ model.delivery != null ? model.delivery.city : '' }}   </p>
+                    <p style="font-size: 14px;"> <b> Zip Code:   </b> {{ model.delivery != null ? model.delivery.zipcode : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Phone:   </b> {{ model.delivery != null ? model.delivery.phone : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Notes:   </b> {{ model.delivery != null ? model.delivery.notes : '' }}  </p>
+                </td>
+                <td style="width: 341px;">
+                    <p style="font-size: 14px; margin-top: 22px;"> <b> Delivery Date:  </b>  {{ model.delivery != null ? model.delivery.deliveryDate : '' }} </p>
+                    <p style="font-size: 14px;"> <b> Delivery Time:  </b> {{ model.delivery != null ? model.delivery.deliveryTime : '' }}   </p>
+                    <p style="font-size: 14px;"> <b> Delivery Drop Off Ref #:  </b>  {{ model.delivery != null ? model.delivery.deliveryRef : '' }}  </p>
+                    <p style="font-size: 14px;"> <b> Contact:  </b> {{ model.delivery != null ? model.delivery.contact : '' }}   </p>
+                    <p style="font-size: 14px;"> <b> PCs/Weight (Lbs):  </b> {{ model.delivery != null ? model.delivery.pcsweight : '' }}   </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table>
+        <tbody>
+            <tr style="border-top: 1px solid #adadad; border-right: 0px solid; border-left: 0px solid; border-bottom: 0px solid;">
+                <td style="width: 341px;"> 
+                    <p style="font-size: 14px;"> Special Instructions </p>
+                    <p style="font-size: 14px;"> <b> Send Invoice To accounting@usatruckbrokers.com   </b>  </p>
+                    <p style="font-size: 14px;"> <b> USA Truck Brokers Inc.   </b>  </p>
+                    <p style="font-size: 14px;"> <b> 14750 NW77 Court Suite 200 Miami Lakes, FL 33016  </b>  </p>
+                    <p style="font-size: 14px;"> <b> Tel: 305-819-3000  </b>  </p>
+                    <p style="font-size: 14px;"> <b> Fax: 305-819-7146  </b>  </p>
+                    <p style="font-size: 14px;"> <b> Email: </b>  </p>
+                </td>
+                <td style="width: 341px;">
+                    <p style="font-size: 14px;"> <b> Terms </b> </p>
+                    <p style="font-size: 14px;"> <b> 30 days after receipt of original POD/ Bill of Landing, carrier invoice and signed rate confirmation.
+                        Please provide USA Truck Brokers Inc.trip number on invoice to ensure proper payment.  </b>  </p>
+                    <p style="font-size: 14px;"> <b>We Offer 2% Quick Pay (within 72 hours after legible BOL's are reviewed and received by our Accounting
+                        Department.  </b>  </p>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <p style="font-size: 14px;">
+        CONTRACT ADDENDUM AND LOAD CONFIRMATION PROVISIONS
+    </p>
+    <ol style="font-size: 13px;">
+        <li>  This load is subject to all terms and conditions of the Broker-Carrier agreement and the terms and conditions
+            included on this document. </li>
+        <li> Driver must be on dock when truck is loaded, must pulp product. Do not accept any damaged boxes or
+            broken pallets. </li>
+        <li> Load pays no detention. </li>
+        <li>  As Proof of Delivery, Driver/Carrier must EMAIL, FAX or TEXT legible copies of ALL documentation as soon
+            as load has been delivered or within 48 hours. Must send ORIGINAL Bill of lading and additional paperwork
+            within 7 days after delivery. Failure to comply with these requirements will result in a $50.00 penalty per day and
+            a delay in payment. </li>
+        <li> No payment for additional charges (stop off, unloading, etc.) may be added to freight invoice without approval
+            of USA Truck Brokers Inc at the time of occurrence. A revised confirmation sheet authorizing extra charges must
+            be issued by USA Truck Brokers Inc. </li>
+        <li> Carriers authorized signature on this confirmation verifies carrier has insurance in the limits designed by USA
+            Truck Brokers Inc for any loss or damage to shipment and or liability to the general public. If liability for any claim
+            is disputed, USA Truck Brokers reserves the right to withhold settlements until a mutually agreed settlement is
+            negotiated. </li>
+        <li> Carrier agrees to move load on vehicle operating under its authority and insurance. </li>
+        <li> All missed or late appointments are subject to fines </li>
+        <li> Carriers are required to check every day (including Saturday, Sunday and holidays) between 8:00 am to 10:00
+            am Eastern Time, failure to do so can result in a $ 150.00 fine against carriers settlement for each infraction. </li>
+        <li>  Original Bill of ladings is required to process your payments, no photocopies accepted. NO EXCEPTIONS.  </li>
+        <li>  We charge 2 % on fuel advance amount plus $ 15.00 to issue any com-check.  </li>
+        <li>  This rate sheet must be signed and returned to USA Truck Brokers before truck arrived to the shipper
+            otherwise your truck won't be loaded  </li>
+        <li> Please lock and seal all reefer or van loads, notate seal # on the BOL. </li>
+        <li>  Do not ever break a seal without someone from the receiver observing and then signing your bill of lading as
+            SEAL INTACT upon delivery, if receiver refuses to do this please call USA Truck Brokers immediately. </li>
+        <li> Carrier or its agent certifies that any TRU equipment furnished will be in compliance with the in-use
+            requirements of California's TU regulations. </li>
+    </ol>
+    <p style="font-size: 14px;">
+        This document clarifies, augments and amends the carrier and broker agreement between USA Truck Brokers
+        And CARRIER and becomes part of that agreement
+    </p>
+    <table style="margin-top: 5px;">
+        <thead>
+            <tr style="border-top: 1px solid #adadad; border-right: 0px solid; border-left: 0px solid; border-bottom: 0px solid; ">
+                <th style="text-align: center; background-color: #ffffff;"> 
+                    <h6 style="font-size: 14px; margin-top: 5px"> <b> Trailer VIN Number  </b> </h6>
+                    <h6>
+                        <table style="border: 1px solid #adadad; margin-top: 20px; margin-left: 65px;"> <tr> <td style="width: 200px;"></td> </tr></table>
+                    </h6>
+                </th>
+                <th style="text-align: center; background-color: #ffffff;"> 
+                    <h6 style="font-size: 14px; margin-top: 5px"> <b> Truck VIN Number   </b> </h6>
+                    <h6>
+                        <table style="border: 1px solid #adadad; margin-top: 20px; margin-left: 65px;"> <tr> <td style="width: 200px;"></td> </tr></table>
+                    </h6>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr style="border-top: 0px solid; border-right: 0px solid; border-left: 0px solid; border-bottom: 1px solid #adadad;">
+                <td style="width: 341px; margin-bottom: 10px;">
+                    <p style="font-size: 14px;"> Carrier  <b> {{ model.carrierSelected != null ? model.carrierSelected.carrier : ''  }}  </b>  </p>
+                    <p style="font-size: 14px;"> MC#   <b> {{ model.carrierSelected != null ? model.carrierSelected.mc : ''  }}  </b>  </p>
+                    <p style="font-size: 14px;"> Address <b>  {{ model.carrierSelected != null ? model.carrierSelected.address : ''  }}    </b></p>
+                    <p style="font-size: 14px;"> City <b>   {{ model.carrierSelected != null ? model.carrierSelected.city : ''  }}  </b> </p>
+                    <p style="font-size: 14px;"> Phone  <b> {{ model.carrierSelected != null ? model.carrierSelected.phone : ''  }}  </b> </p>
+                    <p style="font-size: 14px;"> Contact  <b> {{ model.carrierSelected != null ? model.carrierSelected.contact : ''  }}  </b></p>
+                    <p style="font-size: 14px;"> Please Sign and fax back to or e-mail to USA Truck
+                        Brokers Inc. </p>
+                        <h6>
+                            <table style="border: 1px solid #adadad; margin-top: 20px; margin-left: 65px;"> <tr> <td style="width: 200px;"></td> </tr></table>
+                        </h6>
+                </td>
+                <td style="width: 341px;  margin-bottom: 10px;">
+                    <table>
+                        <thead>
+                            <tr  style="border: 1px solid #000000;">
+                                <th style="text-align: center; background-color: #ffffff; width: 100px;"> Service </th>
+                                <th style="text-align: center; background-color: #ffffff; width: 100px;"> Notes </th>
+                                <th style="text-align: center; background-color: #ffffff; width: 100px;"> Payment </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngIf="model.carriers != null">
+                                <tr style="border: 1px solid #000000;" *ngFor="let carrier of model.carriers">
+                                    <td> {{ carrier.service }} </td>
+                                    <td> {{ carrier.notes }} </td>
+                                    <td> ${{ carrier.payment | number: '1.2' }} </td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <h6 style="font-size: 14px; margin-top: 50px;"> Total To Pay:  ${{ model.totalPay | number: '1.2' }} </h6>
+                    <h6 style="font-size: 14px; margin-top: 50px;"> Carrier:  <b> {{ model.carrierSelected != null ? model.carrierSelected.carrier : ''  }}  </b> </h6>
+                    <h6>
+                        <table style="border: 1px solid #adadad; margin-top: 67px; margin-left: 65px;"> <tr> <td style="width: 200px;"></td> </tr></table>
+                    </h6>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

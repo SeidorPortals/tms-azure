@@ -1,0 +1,197 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+        <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+            <div class="col-md">
+                <div class="card card-user">
+                    <div class="card-header">
+                        <ui5-bar design="Driver">
+                            <h3 class="card-title" slot="startContent">Truck </h3>
+                            <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="statusValid"
+                            (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                            </app-btn-status>
+                            <ui5-button icon="complete" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                            </ui5-button>
+                            <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addForm.invalid">Save
+                            </ui5-button>
+                            <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/trucks">Cancel
+                            </ui5-button>
+                        </ui5-bar>
+                        <h6 class="pl-4 card-title">Status: {{vs.getStatusByCode(numberStatus)}} </h6>
+                        <!-- <input id="STATUSID" type="text" class="form-control input-fi" placeholder="STATUSID" formControlName="STATUSID" readonly> -->
+                    </div>
+                    <div class="card-body" style="padding-left: 2%;">
+                        <h5 class="card-title">General Information</h5>
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <div class="form-group" style="width: 80%;">
+                                    <div class="pb-1 pl-2">
+                                        <label for="Number">Number <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="Number" type="text" class="form-control input-fi" placeholder="  Number" formControlName="TRUCKNUMBER">
+                                        <span *ngIf="validarcampos('TRUCKNUMBER')" class="form-text text-danger">Please
+                                            Provide a Number</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Make">Make</label>
+                                        <input id="Make" type="text" class="form-control input-fi" placeholder="  Make" formControlName="MAKE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Number">Year</label>
+                                        <nz-select  class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="TYEAR">
+                                            <nz-option  *ngFor="let data of vs.YearsData" [nzLabel]="data['code']" [nzValue]="data['code']" ></nz-option>
+                                          </nz-select>
+                                        <!-- <select class="custom-select input-fi" required formControlName="TYEAR" type="number">
+                                            <option value=2010>2000</option>
+                                            <option value=2011>2001</option>
+                                            <option value=2012>2002</option>
+                                            <option value=2013>2003</option>
+                                            <option value=2014>2004</option>
+                                            <option value=2015>2005</option>
+                                            <option value=2016>2006</option>
+                                            <option value=2017>2007</option>
+                                            <option value=2018>2008</option>
+                                            <option value=2019>2009</option>
+                                            <option value=2010>2010</option>
+                                            <option value=2011>2011</option>
+                                            <option value=2012>2012</option>
+                                            <option value=2013>2013</option>
+                                            <option value=2014>2014</option>
+                                            <option value=2015>2015</option>
+                                            <option value=2016>2016</option>
+                                            <option value=2017>2017</option>
+                                            <option value=2018>2018</option>
+                                            <option value=2019>2019</option>
+                                            <option value=2020>2020</option>
+                                            <option value=2021>2021</option>
+                                            <option value=2022>2022</option>
+                                            <option value=2023>2023</option>
+                                        </select> -->
+                                        <!-- <input type="number" id="Year" required class="form-control input-fi" name="Year" min="2000" max="2023" formControlName="TYEAR"> -->
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="LicensePlate">License Plate <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="LicensePlate" type="text" class="form-control input-fi" placeholder="  License Plate" formControlName="LICENSEPLATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Model">Model</label>
+                                        <input id="Model" type="text" class="form-control input-fi" placeholder="  Model" formControlName="MODEL">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="IDNumber">ID Number</label>
+                                        <input id="IDNumber" type="text" class="form-control input-fi" placeholder="  ID Number" formControlName="IDNUMBER">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="MONITOR">Monitor</label>
+                                        <input id="MONITOR" type="text" class="form-control input-fi" placeholder="Monitor" formControlName="MONITOR">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group" style="width: 80%;">
+                                    <div class="pb-1 pl-2 col-6">
+                                        <label for="Weight">Weight</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control input-fi" min="0" step="0.1" formControlName="WEIGHT" placeholder="Weight">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30%">
+                                                <select formControlName="UNITCODE" style="margin: 0px; padding: 0px 0px 0px 6px; height: 100%; background-color: #f8f8f8;" class="btn-input-group">
+                                                <option value="LB">LB</option>
+                                                <option value="KG">KG</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="SunPass">Sun Pass #</label>
+                                        <input id="SunPass" type="text" class="form-control input-fi" placeholder="  Sun Pass #" formControlName="SUNPASS">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="InvestorMail">Investor Email</label>
+                                        <input id="InvestorMail" type="text" class="form-control input-fi" placeholder="Investor Email" formControlName="INVESTOREMAIL">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="PREPASS">Prepass #</label>
+                                        <input id="PREPASS" type="text" class="form-control input-fi" placeholder="  Prepass" formControlName="PREPASS">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="EZPASS">EZ Pass #</label>
+                                        <input id="EZPASS" type="text" class="form-control input-fi" placeholder="  EZ Pass" formControlName="EZPASS">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Insuranse">Insuranse</label><br>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="CARGO" formControlName="CARGO" checked>
+                                            <label class="form-check-label" for="CARGO">Cargo</label>
+                                        </div>
+                                        <div class="form-check-inline pt-2 pl-2">
+                                            <input class="form-check-input" type="checkbox" id="LIABILITY" formControlName="LIABILITY">
+                                            <label class="form-check-label" for="LIABILITY">Liability</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="BOBTAIL" formControlName="BOBTAIL">
+                                            <label class="form-check-label" for="BOBTAIL">Bobtail</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="PHYSICALDAMAGE" formControlName="PHYSICALDAMAGE">
+                                            <label class="form-check-label" for="PHYSICALDAMAGE">Physical Damage</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="LicExpiresDate">License Expires Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="LicExpiresDate" type="date" class="form-control date-inp" formControlName="LICENSEEXPDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="ANNUALINSPECTIONDate">Annual Inspection Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="ANNUALINSPECTIONDate" type="date" class="form-control date-inp" formControlName="ANNUALINSPECTION">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="ActivatedOn">Activated On <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="ActivatedOn" type="date" class="form-control date-inp" formControlName="ACTIVEDON">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="DeactivatedCh">Deactivated On</label>
+                                        <input id="DeactivatedCh" type="date" class="form-control date-inp" formControlName="DEACTIVEDON">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="FuelCardNum">Fuel Card Number</label>
+                                        <input id="FuelCardNum" type="text" class="form-control input-fi" placeholder="  Card Number" formControlName="FUELCARD">
+                                        <!-- <ui5-checkbox id="FuelCardCh " text="Use Fueld Card"></ui5-checkbox> -->
+                                    </div>
+                                    <div class="form-check-inline pt-2 pl-2">
+                                        <input class="form-check-input" type="checkbox" id="FifthWheel" formControlName="FIFTHWEEL">
+                                        <label class="form-check-label" for="FifthWheel">Permanent Fifth Wheel</label>
+                                    </div>
+                                    <div class="form-check-inline pt-2 pl-2">
+                                        <input class="form-check-input" type="checkbox" id="Monitor" formControlName="USEMONITOR">
+                                        <label class="form-check-label" for="Monitor">Use Monitor</label>
+                                    </div>
+                                    <div class="pt-2 pl-2">
+                                        <label for="RemainDays">Remain into Monitor after Delivery for (Days)</label>
+                                        <input id="RemainDays" type="number" style="width: 30%;" class="form-control input-fi" placeholder=" 0" formControlName="MONITORDAYS">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <h5 class="card-title">Others</h5>
+                            <ui5-tabcontainer class="full-width " style="height : 15rem ">
+                                <ui5-tab text="Notes " selected>
+                                    <textarea rows="5" nz-input formControlName="NOTES"></textarea>
+                                </ui5-tab>
+                                <ui5-tab text="Attachments ">
+                                    <app-upload-attachments [files]="truckFiles" [objectID]="addForm.get('TRUCKNUMBER').value" [type]="3" [service]="ObjServiceService" ></app-upload-attachments>
+                                </ui5-tab>
+                            </ui5-tabcontainer>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
+    
+        </form>
+    </nz-spin>
+    
+</div>

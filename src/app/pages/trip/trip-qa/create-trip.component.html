@@ -1,0 +1,497 @@
+<app-loading [options]="spPantalla" [texto]="txtPantalla">
+</app-loading>
+
+<div class="row example" *ngIf="!watchAddShipment">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <form [formGroup]="addForm" autocomplete="off">
+            <div class="card card-user">
+                <div class="card-header">
+                    <ui5-bar design="Driver">
+                        <h3 class="card-title" slot="startContent"> {{ tripID == null || tripID.length == 0 ? 'TRIP:' : 'TRIP - ' + tripID }} </h3>
+                        <ui5-button [icon]="!isLoading[3] ? 'accept' : ''" 
+                        [disabled]="(this.sapFacturas.exist == 0 && this.canEdit && this.sapFacturas.proveedors.length > 0) || 
+                        (this.sapFacturas.exist > 0 && !this.canEdit) || (!this.canEdit && this.sapFacturas.proveedors.length > 0) 
+                        || (this.sapFacturas.proveedors.length == 0 && !this.canEdit) || !this.isFinishLoad" (click)="loadShipments('',true);" tooltip="Release" slot="endContent">
+                            <span *ngIf="isLoading[3]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span> Validate Release
+                        </ui5-button>
+                        <ui5-button  [icon]="!isLoading[4] ? 'paper-plane' : ''"[disabled]="!isValidateBill" (click)="sendRelease();" tooltip="Release" slot="endContent">
+                            <span *ngIf="isLoading[4]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                            Release
+                        </ui5-button>
+                        <ng-template #indicatorTemplate><span nz-icon nzType="loading"></span>
+                        </ng-template>
+                        <ui5-button [icon]="!isLoading[0] ? 'complete' : ''" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid || !canEdit" class="form-btn">
+                            <span *ngIf="isLoading[0]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span> Save and Close
+                        </ui5-button>
+                        <ui5-button [icon]="!isLoading[1] ? 'save' : ''" tooltip="Save" class="form-btn" (click)="actionsave(addForm,false)" slot="endContent" type="button" [disabled]="addForm.invalid || !canEdit">
+                            <span *ngIf="isLoading[1]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span> Save
+                        </ui5-button>
+                        <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="./../../trips">Cancel
+                        </ui5-button>
+                    </ui5-bar>
+                    <div class="row justify-content-center align-items-center">
+                        <div class="col-lg-4 mb-2">
+                            <h6 class="card-title">Status: {{vs.getStatusByCodeTrip(numberStatus)}} </h6>
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                            <h6 class="card-title">SUPPLIER: {{ this.addForm.get('SUPPLIERINVOICE').value }} </h6>
+                        </div>
+                        <div class="col-lg-4 mb-2 text-center">
+                            <a *ngIf="showRateConfirmationPDF()" [href]="pdfRate" target="_blank"> <b> Rate Confirmation</b> </a>
+                        </div>
+                        <div class="col-lg-4 mb-2 " *ngIf="addForm.get('STATUSID').value === 2">
+                            <h6 class="card-title">PAYMENT STATUS: {{ vs.getStatusByCodePayment(addForm.get('PAYSTATUSID').value) }} </h6>
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                        </div>
+                        <div class="col-lg-4 mb-2">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body" style="padding-left: 2%;">
+                    <div class="form-row">
+                        <div class="col-md-3">
+                            <h5 class="card-title">General Information</h5>
+                            <div class="form-group">
+                                <label for="Carrier">Carrier <label class="text-danger font-weight-bolder">*</label></label>
+                                <div class="input-group" style="width: 90%;">
+                                    <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                        <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[3].id != '' ? fieldsOVS[3].id : '-' }}</span>
+                                    </div>
+                                    <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 3)" (input)="onChange($event, 3)" (blur)="sinEscribir($event, 3)" [nzAutocomplete]="carriers" placeholder="Carrier" [(ngModel)]="fieldsOVS[3].name"
+                                        [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                    <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                        <button [disabled]="!canEdit" (click)="listSelected(3)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                        </button>
+                                    </div>
+                                    <nz-autocomplete #carriers>
+                                        <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                            <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 3)">
+                                                {{ getOption(option,'OPTION') }}
+                                            </nz-auto-option>
+                                        </ng-container>
+                                    </nz-autocomplete>
+                                    <span *ngIf="validarcampos('CARRIER',0)" class="form-text text-danger"> {{ vs.messages[0]  }}  </span>
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group ">
+                                    <div>
+                                        <label for="Company">Company <label class="text-danger font-weight-bolder">*</label></label>
+                                        <div class="input-group" style="width: 90%;">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[9].id != '' ? fieldsOVS[9].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 9)" (input)="onChange($event, 9)" (blur)="sinEscribir($event, 9)" [nzAutocomplete]="companys" placeholder="Company" [(ngModel)]="fieldsOVS[9].name"
+                                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button [disabled]="!canEdit" (click)="listSelected(9)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #companys>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 9)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                        </div>
+                                        <span *ngIf="validarcampos('COMPANY',1)" class="form-text text-danger"> {{ vs.messages[1]  }}  </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title"> </h5>
+                                <div class="form-group">
+                                    <div class="pb-1">
+                                        <label for="VPSales">VP of Sales<label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" [readonly]="true" class="form-read form-control input-fi" id="VPSales" formControlName="VPOFSALE" placeholder="VP of Sales">
+                                        <span *ngIf="validarcampos('VPOFSALE',2)" class="form-text text-danger">{{ vs.messages[2]  }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group ">
+                                    <div>
+                                        <label for="Agent">Agent<label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" [readonly]="true" class="form-read form-control input-fi" id="Agent" formControlName="AGENT" placeholder="Agent">
+                                        <span *ngIf="validarcampos('AGENT',3)" class="form-text text-danger"> {{ vs.messages[3]  }}  </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group ">
+                                    <div>
+                                        <label for="EqType">Equipment Type <label class="text-danger font-weight-bolder">*</label></label>
+                                        <div class="input-group" style="width: 90%;">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[4].id != '' ? fieldsOVS[4].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 4)" (input)="onChange($event, 4)" (blur)="sinEscribir($event, 4)" [nzAutocomplete]="equipmenttypes" placeholder="Equipment Type" [(ngModel)]="fieldsOVS[4].name"
+                                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button [disabled]="!canEdit" (click)="listSelected(4)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                            </button>
+                                            </div>
+                                            <nz-autocomplete #equipmenttypes>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 4)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                        </div>
+                                        <span *ngIf="validarcampos('EQUIPMENTTYPE',4)" class="form-text text-danger"> {{ vs.messages[4]  }}  </span>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                        <div class="form-row">
+                            <div class="col-md-2 col-lg-2">
+                                <h5 class="card-title">Logistic Data</h5>
+                                <div class="form-group">
+                                    <div class="pb-1">
+                                        <div>
+                                            <label>Transport Type</label>
+                                        </div>
+                                        <fieldset [disabled]="!canEdit">
+                                            <div class="form-check form-check-inline">
+                                                <input [ngClass]="{'form-read' : !canEdit}" class="form-check-input" type="radio" id="gridRadios1" formControlName="TRANSPORTTYPE" value="0">
+                                                <label class="form-check-label" for="gridRadios1">
+                                                FTL
+                                            </label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input [ngClass]="{'form-read' : !canEdit}" class="form-check-input" type="radio" id="gridRadios2" formControlName="TRANSPORTTYPE" value="1">
+                                                <label class="form-check-label" for="gridRadios2">
+                                                LTL
+                                            </label>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1 col-lg-1 col-sm-12 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <label for="Tempareture">Tempareture</label>
+                                <div class="form-group" style="width: 80%;">
+                                    <input type="number" min="0" [readonly]="!canEdit" class="form-read form-control input-fi" formControlName="TEMPERATURE" placeholder="0">
+                                </div>
+                            </div>
+                            <div class="col-md-2 col-lg-2 pt-4">
+                                <h5 class="card-title"> </h5>
+                                <label for="Driver">Driver</label>
+                                <div class="form-group" style="width: 90%;">
+                                    <div class="input-group mb-3">
+                                        <!---->
+                                        <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                            <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[0].id != '' ? fieldsOVS[0].id : '-' }}</span>
+                                        </div>
+                                        <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 0)" (input)="onChange($event, 0)" (blur)="sinEscribir($event, 0)" [nzAutocomplete]="drivers" placeholder="Driver" [(ngModel)]="fieldsOVS[0].name"
+                                            [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                        <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                            <button (click)="listSelected(0)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                            </button>
+                                        </div>
+                                        <nz-autocomplete #drivers>
+                                            <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 0)">
+                                                    {{ getOption(option,'OPTION') }}
+                                                </nz-auto-option>
+                                            </ng-container>
+                                        </nz-autocomplete>
+                                    </div>
+                                    <span *ngIf="validarcampos('DRIVER',5)" class="form-text text-danger"> {{ vs.messages[5]  }}  </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <label for="Truck">Truck #</label>
+                                <div class="form-group " style="width: 90%;">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                            <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[1].id != '' ? fieldsOVS[1].id : '-' }}</span>
+                                        </div>
+                                        <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 1)" (input)="onChange($event, 1)" (blur)="sinEscribir($event, 1)" [nzAutocomplete]="trucks" placeholder="truck" [(ngModel)]="fieldsOVS[1].name"
+                                            [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                        <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                            <button (click)="listSelected(1)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                            </button>
+                                        </div>
+                                        <nz-autocomplete #trucks>
+                                            <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 1)">
+                                                    {{ getOption(option,'OPTION') }}
+                                                </nz-auto-option>
+                                            </ng-container>
+                                        </nz-autocomplete>
+                                    </div>
+                                    <span *ngIf="validarcampos('TRUCK',6)" class="form-text text-danger"> {{ vs.messages[6]  }}  </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <label for="Trailer">Trailer</label>
+                                <div class="form-group" style="width: 90%;">
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                            <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[2].id != '' ? fieldsOVS[2].id : '-' }}</span>
+                                        </div>
+                                        <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" (focus)="onChange($event, 2)" (input)="onChange($event, 2)" (blur)="sinEscribir($event, 2)" [nzAutocomplete]="trailers" placeholder="trailer" [(ngModel)]="fieldsOVS[2].name"
+                                            [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                        <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                            <button (click)="listSelected(2)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                        </button>
+                                        </div>
+                                        <nz-autocomplete #trailers>
+                                            <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 2)">
+                                                    {{ getOption(option,'OPTION') }}
+                                                </nz-auto-option>
+                                            </ng-container>
+                                        </nz-autocomplete>
+                                    </div>
+                                    <span *ngIf="validarcampos('TRAILER',7)" class="form-text text-danger"> {{ vs.messages[7]  }}  </span>
+                                </div>
+                            </div>
+                            <div class="col-md-2 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group ">
+                                    <div>
+                                        <label for="DriPhone">Dispatcher/Driver Phone</label>
+                                        <input type="text" [readonly]="!canEdit" class="form-read form-control input-fi" id="DriPhone" formControlName="DISPATCHERDRIVERPHONE" placeholder="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row-8">
+                            <ui5-panel accessible-role="Complementary" class="full-width" collapsed>
+                                <div slot="header" class="header">
+                                    <ui5-title level="H6" class="text-left" style="padding-bottom: 2%;">Second Carrier
+                                    </ui5-title>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="SndCarrier">Second Carrier</label>
+                                                <div class="input-group" style="width: 90%;">
+                                                    <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                        <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[5].id != '' ? fieldsOVS[5].id : '-' }}</span>
+                                                    </div>
+                                                    <input type="text" [readonly]="!canEdit" class="form-read form-control  input-fisnd" (focus)="onChange($event, 5)" (input)="onChange($event, 5)" (blur)="sinEscribir($event, 5)" [nzAutocomplete]="secondcarriers" placeholder="Second Carrier" [(ngModel)]="fieldsOVS[5].name"
+                                                        [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                                    <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                        <button (click)="listSelected(5)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="formb-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                    </button>
+                                                    </div>
+                                                    <nz-autocomplete #secondcarriers>
+                                                        <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                            <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 5)">
+                                                                {{ getOption(option,'OPTION') }}
+                                                            </nz-auto-option>
+                                                        </ng-container>
+                                                    </nz-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 pl-0">
+                                        <div class="form-group">
+                                            <div>
+                                                <label for="SndDriver">Driver</label>
+                                                <div class="input-group" style="width: 90%;">
+                                                    <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                        <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[6].id != '' ? fieldsOVS[6].id : '-' }}</span>
+                                                    </div>
+                                                    <input type="text" [readonly]="!canEdit" class="form-read form-control  input-fisnd" (focus)="onChange($event, 6)" (input)="onChange($event, 6)" (blur)="sinEscribir($event, 6)" [nzAutocomplete]="seconddrivers" placeholder="Second Driver" [(ngModel)]="fieldsOVS[6].name"
+                                                        [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                                    <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                        <button (click)="listSelected(6)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                    </button>
+                                                    </div>
+                                                    <nz-autocomplete #seconddrivers>
+                                                        <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                            <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 6)">
+                                                                {{ getOption(option,'OPTION') }}
+                                                            </nz-auto-option>
+                                                        </ng-container>
+                                                    </nz-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+
+                                        <div class="form-group ">
+                                            <div>
+                                                <label for="SndTruck">Truck #</label>
+                                                <div class="input-group" style="width: 90%;">
+                                                    <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                        <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[7].id != '' ? fieldsOVS[7].id : '-' }}</span>
+                                                    </div>
+                                                    <input type="text" [readonly]="!canEdit" class="form-read form-control  input-fisnd" (focus)="onChange($event, 7)" (input)="onChange($event, 7)" (blur)="sinEscribir($event, 7)" [nzAutocomplete]="secondtrucks" placeholder="Second Truck" [(ngModel)]="fieldsOVS[7].name"
+                                                        [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                                    <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                        <button (click)="listSelected(7)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                    </button>
+                                                    </div>
+                                                    <nz-autocomplete #secondtrucks>
+                                                        <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                            <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 7)">
+                                                                {{ getOption(option,'OPTION') }}
+                                                            </nz-auto-option>
+                                                        </ng-container>
+                                                    </nz-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group ">
+                                            <div>
+                                                <label for="SndTrailer">Trailer</label>
+                                                <div class="input-group" style="width: 90%;">
+                                                    <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                        <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[8].id != '' ? fieldsOVS[8].id : '-' }}</span>
+                                                    </div>
+                                                    <input type="text" [readonly]="!canEdit" class="form-read form-control  input-fisnd" (focus)="onChange($event, 8)" (input)="onChange($event, 8)" (blur)="sinEscribir($event, 8)" [nzAutocomplete]="secondtrailers" placeholder="Second Trailer" [(ngModel)]="fieldsOVS[8].name"
+                                                        [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                                    <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                        <button (click)="listSelected(8)" style="margin: 0px; padding: 0px; width: 30px; " [disabled]="!canEdit" class="form-btn btn-input-group" type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                    </button>
+                                                    </div>
+                                                    <nz-autocomplete #secondtrailers>
+                                                        <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                            <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 8)">
+                                                                {{ getOption(option,'OPTION') }}
+                                                            </nz-auto-option>
+                                                        </ng-container>
+                                                    </nz-autocomplete>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-group ">
+                                            <div>
+                                                <label for="SndDriPhone">Dispatcher/Driver Phone</label>
+                                                <input type="text" [readonly]="!canEdit" class="form-read form-control input-fisnd" id="SndDriPhone" formControlName="SECONDDISPATCHERDRIVERPHONE" placeholder="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ui5-panel>
+                        </div>
+                        <div class="row pt-4">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <h5 class="card-title ">Shipments</h5>
+                                </div>
+                                <div class="col-lg-4" style="text-align: right;">
+                                    <!-- routerLink="/new-shipment"-->
+                                    <ui5-button [icon]="!isLoading[2] ? 'add': ''" tooltip="Add" class="mr-2" [disabled]="!canEdit || (addForm.invalid && tripID == '')" class="form-btn" accessible-name-ref="lblAccept" (click)="actionWatchShipment(true)">
+                                        <span *ngIf="isLoading[2]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                                    </ui5-button>
+                                    <!-- <ui5-button icon="cancel" tooltip="Cancel" class="mr-2" accessible-name-ref="lblCancel"
+                                    routerLink="/main-nav">
+                                </ui5-button> -->
+                                </div>
+                            </div>
+                            <div class="row justify-content-center align-items-center">
+                                <div class="col-lg-12 col-md-12">
+                                    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+                                        <!---->
+                                        <ui5-input id="searchInput" slot="endContent" (change)="searchShipments($event)" placeholder="Search by Shipments..." style="width: 75%">
+                                            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+                                        </ui5-input>
+                                    </ui5-bar>
+
+                                    <ui5-table class="demo-table" id="table" style="text-align: left;" no-data-text="No Data">
+                                        <!-- Columns -->
+                                        <ui5-table-column slot="columns" *ngFor="let column of columnsShipment">
+                                            <span *ngIf="column.watch == null" style="line-height: 1.4rem"> {{column.title}} </span>
+                                        </ui5-table-column>
+
+                                        <ui5-table-row *ngFor="let item of listShipments">
+                                            <ng-container *ngFor="let column of columnsShipment">
+                                                <ui5-table-cell *ngIf="column.watch == null">
+                                                    <div *ngIf="column.select != null && column.select; else campoNormal">
+                                                        <ui5-button (click)="actionWatchShipment(true, item[column.key])" class="btn-select" icon="edit">
+                                                            {{ item[column.key] }} </ui5-button>
+                                                    </div>
+                                                    <ng-template #campoNormal>
+                                                        <ng-container *ngIf="column.key != null && column.key.length > 0; else fieldNoData">
+                                                            <span *ngIf="column.type === 'TEXT' || column.type === 'DATE'"> {{ item[column.key] }} </span>
+                                                            <span *ngIf="column.type === 'NUMBER'">   ${{ item[column.key] | number: '1.2' }}  </span>
+                                                        </ng-container>
+                                                        <ng-template #fieldNoData>
+                                                            <div *ngIf="column.title === 'Actions'">
+                                                                <ui5-button icon="delete" style="height: 30px;" [disabled]="!canEdit || !item['CANEDIT']" (click)="confirmDelete(item['SHIPMENTID'])">
+                                                                </ui5-button>
+                                                            </div>
+                                                        </ng-template>
+                                                    </ng-template>
+                                                </ui5-table-cell>
+                                            </ng-container>
+                                        </ui5-table-row>
+                                    </ui5-table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <h5 class="card-title pt-3">Others</h5>
+
+                            <ui5-tabcontainer style="padding-bottom: 2%;">
+                                <ui5-tab text="Notes" selected>
+                                    <div class="form-row">
+                                        <div class="col-lg-4 pr-4">
+                                            <ui5-title level="H4" id="radioGroupTitle1">Special Instructions</ui5-title>
+                                            <textarea rows="3" nz-input style="resize: none; margin-top: .7%;" [readonly]="!canEdit" class="form-read" formControlName="SPECIALINSTRUCTIONS"></textarea>
+                                        </div>
+                                        <div class="col-lg-4 pr-4">
+                                            <ui5-title level="H4" id="radioGroupTitle2">Notes to carriers</ui5-title>
+                                            <textarea rows="3" nz-input style="resize: none; margin-top: .7%;" [readonly]="!canEdit" class="form-read" formControlName="CARRIERNOTES"></textarea>
+                                            <div class="text-right">
+                                                <div class="form-group">
+                                                    <ui5-label class="label" for="CARRIEREMAIL" show-colon>Carrier Notification Email</ui5-label> <br>
+                                                    <input [readonly]="!canEdit" class="form-read text-left " nz-input placeholder="mail@mail.com " style="width: 50%;" show-clear-icon formControlName="CARRIEREMAIL" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-4 pr-4">
+                                            <ui5-title level="H4" id="radioGroupTitle3">General Notes</ui5-title>
+                                            <textarea rows="3" nz-input style="resize: none; margin-top: .7%;" [readonly]="!canEdit" class="form-read" formControlName="GENERALNOTES"></textarea>
+                                            <div class="text-right" style="padding-top: .5%; width: 100%">
+                                                <div class="form-group">
+                                                    <ui5-label class="label" for="AGENTEMAIL" show-colon>Agent Email</ui5-label> <br>
+                                                    <input [readonly]="!canEdit" class="form-read text-left " nz-input placeholder="mail@mail.com " style="width: 50%;" show-clear-icon formControlName="AGENTEMAIL" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </ui5-tab>
+                                <ui5-tab text="Attachments">
+                                    <app-upload-attachments *ngIf="loadAttachment" [canEdit]="canEdit" [files]="tripFiles" [objectID]="tripID" [type]="7" [service]="tripService" ></app-upload-attachments>
+                                </ui5-tab>
+                            </ui5-tabcontainer>
+
+
+                        </div>
+                </div>
+            </div>
+    </form>
+</div>
+
+    <app-template-rate-confirmation [descargar]="iniciarDescarga" [model]="truckBrokers" (cerrar)="closeProgressPDF($event)"></app-template-rate-confirmation>
+
+    <app-create-shipment *ngIf="watchAddShipment" [tripID]="tripID" [canEdit]="canEdit" [formTrip]="addForm" [tripUUID]="tripUUID" [carrierSelect]="carriersSelect" [shipmentID]="shipmenIDSelected" (actionGetTripID)="getTripID($event)" (closeAddShipment)="actionWatchShipment($event)"></app-create-shipment>
+
+    <app-modal-dropdown [ovsSelected]="fieldOVSSelected" [watchOVS]="watchOVS" [columns]="columnsSelected" [list]="listMSelected" [fieldSearch]="valueField" (actionClose)="closeModalDropdown($event)" (actionUpdateInfo)="listSelected($event, true)" (fieldSelected)="changeField($event)">
+    </app-modal-dropdown>

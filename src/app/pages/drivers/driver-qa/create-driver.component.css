@@ -1,0 +1,19 @@
+.input-fi{
+   
+    width: 80%;
+}
+
+.address-inp{
+    width: 80%;
+}
+
+.date-inp{
+    width: 47%;
+}
+
+.shadow-textarea textarea.form-control::placeholder {
+    font-weight: 300;
+}
+.shadow-textarea textarea.form-control {
+    padding-left: 0.8rem;
+}

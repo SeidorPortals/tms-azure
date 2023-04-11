@@ -1,0 +1,195 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <!-- <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off"> -->
+        <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+            <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+                <div class="col-md">
+                    <div class="card card-user">
+                        <div class="card-header">
+                            <ui5-bar design="Shipper">
+                                <h3 class="card-title" slot="startContent">Shipper: </h3>
+                                <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="addForm.invalid"
+                                    (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;"
+                                    slot="endContent">
+                                </app-btn-status>
+                                <ui5-button icon="complete" tooltip="Save and Close" slot="endContent"
+                                    (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                                </ui5-button>
+                                <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true"
+                                    [disabled]="addForm.invalid">Save
+                                </ui5-button>
+                                <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/shippers">Cancel
+                                </ui5-button>
+                            </ui5-bar>
+                            <h6 class="pl-3 card-title">Status: {{vs.getStatusByCode(numberStatus)}} </h6>
+                        </div>
+                        <div class="card-body">
+        
+                            <div class="form-row">
+                                <div class="col-md-3 ">
+                                    <h5 class="card-title">General Information</h5>
+                                    <div class="form-group">
+                                        <div class="pb-1 pl-2">
+                                            <label for="shipper">Shipper ID</label>
+                                            <input id="shipper" type="text" class="form-control" placeholder="ID"
+                                                formControlName="SHIPPERID" disabled>
+                                            <!-- <span *ngIf="validarcampos('SHIPPERID')" class="form-text text-danger">Consignee ID
+                                                Mandatory</span> -->
+                                        </div>
+                                        <div class="pb-1 pl-2">
+                                            <label for="shname">Name <label
+                                                    class="text-danger font-weight-bolder">*</label></label>
+                                            <input id="shname" type="name" class="form-control" placeholder="Name"
+                                                formControlName="NAME">
+                                            <span *ngIf="validarcampos('NAME')" class="form-text text-danger">Name
+                                                Mandatory</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div class="form-row">
+                                <div style="align-items: flex-end;">
+                                    <ui5-button id="addPopoverButton" icon="add" (click)="open(AddressModal,'.!')"></ui5-button>
+                                </div>
+                                <ui5-table class="demo-table" no-data-text="No Data" id="table">
+                                    <!-- Columns -->
+        
+                                    <ui5-table-column slot="columns" style="width: 12rem">
+                                        <span style="line-height: 1.4rem">Address</span>
+                                    </ui5-table-column>
+                                    <ui5-table-column slot="columns" style="width: 12rem">
+                                        <span style="line-height: 1.4rem">City</span>
+                                    </ui5-table-column>
+                                    <ui5-table-column slot="columns" style="width: 12rem">
+                                        <span style="line-height: 1.4rem">State</span>
+                                    </ui5-table-column>
+        
+                                    <ui5-table-column slot="columns" style="width: 12rem">
+                                        <span style="line-height: 1.4rem">Actions</span>
+                                    </ui5-table-column>
+                                    <ui5-table-row *ngFor="let address of ObjList; let i = index" class="ui-table-row-root">
+                                        <ui5-table-cell slot="default">
+                                            <span>{{address.ADRESS}}</span>
+                                        </ui5-table-cell>
+        
+                                        <ui5-table-cell slot="default">
+                                            <span>{{address.CITY}}</span>
+                                        </ui5-table-cell>
+        
+                                        <ui5-table-cell slot="default">
+                                            <span>{{address.STATE}}</span>
+                                        </ui5-table-cell>
+        
+                                        <ui5-button icon="edit" [disabled]="addForm.invalid"
+                                            (click)="open(AddressModal ,address['ADDRESSID'])">
+                                        </ui5-button>
+                                        <ui5-button icon="delete">
+                                        </ui5-button>
+                                    </ui5-table-row>
+                                </ui5-table>
+                            </div>
+        
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </nz-spin>
+        
+
+    <ng-template #AddressModal let-modal>
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Add Shipper Address </h4>
+        </div>
+        <div class="modal-body">
+            <div class="row" style="padding: 5%;">
+                <h5 class="card-title">Address</h5>
+                <div class="form-group">
+                    <form [formGroup]="addFormAddress" (ngSubmit)="actionsaveAddress(addFormAddress,false)"
+                        autocomplete="off">
+                        <div class="form-row pb-1">
+                            <div class="col-md-5">
+                                <label>House Number <label class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" class="form-control address-inp" placeholder="House Number"
+                                    formControlName="HOUSENUMBER">
+                                    <span *ngIf="validarcamposAdd('HOUSENUMBER')" class="form-text text-danger">Mandatory</span>
+                            </div>
+                            <div class="col-md-7">
+                                <label>Street<label class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" class="form-control address-inp" placeholder="Street"
+                                    formControlName="STREET">
+                                    <span *ngIf="validarcamposAdd('STREET')" class="form-text text-danger">Mandatory</span>
+                            </div>
+                        </div>
+                        <div class="pl-0 pb-1">
+                            <label>Address Line 1</label>
+                            <input type="text" class="form-control address-inp" placeholder="Address"
+                                formControlName="ADRESS">
+                        </div>
+                        <div class="form-row pb-2">
+
+                            <div class="col-md-5">
+                                <label>City<label class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" class="form-control address-inp" placeholder=" City"
+                                    formControlName="CITY">
+                                    <span *ngIf="validarcamposAdd('CITY')" class="form-text text-danger">Mandatory</span>
+                            </div>
+                            <div class="col-sm-4 ">
+                                <label>State<label class="text-danger font-weight-bolder">*</label></label>
+                                <!-- <input type="text" class="form-control address-inp" placeholder=" State" formControlName="STATE"> -->
+                                <select type="select" class="custom-select input-fi" placeholder="" formControlName="STATE">
+                                    <option *ngFor="let region of RegionList" [value]="region.code">{{region.code}}
+                                    </option>
+                                </select>
+                                <!-- <nz-select class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless
+                                    nzShowSearch nzAllowClear nzPlaceHolder="" nzSize="large"
+                                    formControlName="STATE">
+                                    <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']"
+                                        [nzValue]="states['code']"></nz-option>
+                                </nz-select> -->
+                                <span *ngIf="validarcamposAdd('STATE')" class="form-text text-danger">Mandatory</span>
+                            </div>
+                            <div class="col-md-3">
+                                <label>Zip<label class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" class="form-control address-inp" style="width: 85%;"
+                                    placeholder="ZIPCODE" formControlName="ZIPCODE">
+                                    <span *ngIf="validarcamposAdd('ZIPCODE')" class="form-text text-danger">Mandatory</span>
+                            </div>
+                        </div>
+                        <div class="col-md-5 pl-0">
+                            <label>Country <label class="text-danger font-weight-bolder">*</label></label>
+                            <!-- <input type="text" class="form-control address-inp" placeholder="Country" formControlName="COUNTRY"> -->
+                            <select class="custom-select" placeholder="Country" formControlName="COUNTRY">
+                                <option *ngFor="let country of CountryList" [value]="country.code">{{country.code}}
+                                </option>
+                            </select>
+                            
+                            <!-- <nz-select  class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="" nzSize="large" formControlName="COUNTRY">
+                                <nz-option  *ngFor="let country of CountryList" [nzLabel]="country['code']" [nzValue]="country['code']" ></nz-option>
+                              </nz-select> -->
+                              <span *ngIf="validarcamposAdd('COUNTRY')" class="form-text text-danger">Mandatory</span>
+                        </div>
+                        <div class="col-md-6 pl-0 pt-1">
+                            <label for="celular">Celular</label>
+                            <input id="celular" type="tel" class="form-control address-inp" placeholder="PHONE"
+                                formControlName="PHONE">
+                        </div>
+                        <!-- <div class="col-md-8 pl-0 pt-1">
+                            <label>Celular Email</label>
+                            <input type="email" class="form-control address-inp" placeholder="email" formControlName="CELULAREMAIL">
+                        </div> -->
+                    </form>
+                </div>
+            </div>
+            <hr>
+
+        </div>
+        <div class="modal-footer">
+            <ui5-button id="CreateMD1" (click)="actionsaveAddress(addFormAddress,false)" [disabled]="addFormAddress.invalid">Save</ui5-button>
+            <ui5-button id="CancelMD1" (click)="modal.close('Save click')">Cancel</ui5-button>
+        </div>
+    </ng-template>
+
+    <!-- </form> -->
+</div>

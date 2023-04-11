@@ -1,0 +1,40 @@
+<body class="text-center">
+
+    <main class="w-50 m-auto">
+        <br>
+        <br>
+
+
+        <div class="card">
+            <form [formGroup]="addForm" #f="ngForm" autocomplete="off" class="form-signin w-auto m-auto mb-3">
+
+                <img class="mb-3" src="../../../../assets/img/usaTruck.png" alt="" width="400" height="100">
+                <h1 class="h3 mb-3 fw-normal">Forgot Password</h1>
+
+                <div class="form-floating" [formGroup]="addForm">
+                    <input id="user" type="text" class="form-control" placeholder="  user" formControlName="USER_ID">
+                    <label for="user">Email*</label>
+                </div>
+                <br>
+
+                <button class="w-100 btn btn-lg btn-primary" (click)="recover(false)">Recover Password</button>
+
+
+                <p class="mt-5 mb-3 text-muted">&copy; Dispatchers App 2022</p>
+
+                <div class="form-group text-center">
+
+                    <div class="text-left">Required Fields (*) </div>
+                </div>
+
+
+
+            </form>
+        </div>
+
+
+
+    </main>
+
+
+</body>

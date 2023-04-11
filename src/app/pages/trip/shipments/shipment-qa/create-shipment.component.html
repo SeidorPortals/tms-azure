@@ -1,0 +1,1077 @@
+<app-loading [options]="spPantalla" [texto]="txtPantalla">
+</app-loading>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+<div class="row" style="z-index: 100;">
+    <form [formGroup]="addShipmentForm">
+        <div class="col-md">
+
+            <div class="card ">
+
+                <div class="row" style="padding-left: 2%; padding-right: 2%;">
+
+                    <div class="card-header">
+                        <ui5-bar design="Driver">
+                            <h3 class="card-title" slot="startContent"> {{ tripID == null || tripID.length == 0 ? 'TRIP:' : 'TRIP - ' + tripID }} </h3>
+                            <ui5-button [icon]="!isLoading[0] ? 'save' : ''" tooltip="" slot="endContent" [disabled]="addShipmentForm.invalid || !canEdit || !canEditShipment" (click)="saveShipment()">
+                                <span *ngIf="isLoading[0]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span> Save
+                            </ui5-button>
+                            <ui5-button icon="undo" tooltip="" slot="endContent" (click)="closeShipment()">Back
+                                <!-- routerLink="/new-trip/.!"-->
+                            </ui5-button>
+
+                        </ui5-bar>
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-lg-4 mb-2">
+                                <h6 class="card-title"> {{ shipmentID == null || shipmentID.length == 0 ? 'Shipment:' : 'Shipment - ' + shipmentID }} </h6>
+                            </div>
+                            <div class="col-lg-4 mb-2">
+                                <h6 class="card-title">CUSTOMER: {{ addShipmentForm.get('CUSTOMERINVOICE').value }}
+                                </h6>
+                            </div>
+                            <div class="col-lg-4 mb-2 text-center">
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                                <div class="form-group">
+                                    <label for="Customer" class="col-form-label">Customer <label
+                                            class="text-danger font-weight-bolder">*</label></label>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                            <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                fieldsOVS[1].id != '' ? fieldsOVS[1].id : '-' }}</span>
+                                        </div>
+                                        <input type="text" [readOnly]="!canEdit" class="form-read form-control" (focus)="onChange($event, 1)" (input)="onChange($event, 1)" (blur)="sinEscribir($event, 1)" [nzAutocomplete]="customers" placeholder="Customer" [(ngModel)]="fieldsOVS[1].name" [ngModelOptions]="{ standalone: true }"
+                                            aria-describedby="button-addon2">
+                                        <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                            <button (click)="listSelected(1)" style="margin: 0px; padding: 0px; width: 30px; height: 100%;" [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                            </button>
+                                        </div>
+                                        <nz-autocomplete #customers>
+                                            <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 1)">
+                                                    {{ getOption(option,'OPTION') }}
+                                                </nz-auto-option>
+                                            </ng-container>
+                                        </nz-autocomplete>
+                                    </div>
+                                    <!-- <input type="text" class="form-control" formControlName="CUSTOMER" placeholder="Customer"> -->
+                                    <span *ngIf="validarcampos('CUSTOMER', addShipmentForm)" class="form-text text-danger">Please set a
+                                        Customer.</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="form-group">
+                                    <label for="CustPO" class="col-form-label">Customer PO# <label
+                                            class="text-danger font-weight-bolder">*</label></label>
+                                    <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="CUSTOMERPO" placeholder="Customer PO#">
+                                    <span *ngIf="validarcampos('CUSTOMERPO', addShipmentForm)" class="text-danger">Please set a
+                                        Customer PO#.</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="Pieces" class="col-form-label">Pieces <label
+                                                class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="number" min="0" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="PIECES" placeholder="Pieces">
+                                        <span *ngIf="validarcampos('PIECES', addShipmentForm)" class="form-text text-danger">Please set a
+                                            Pieces.</span>
+                                        <!-- <label for="PCs" class="col-form-label">PCs</label>
+                                        <input type="number" min="0.0" step="0.1" class="form-control" id="PCs" formControlName="PIECES" placeholder="PCs">
+                                        <span *ngIf="validarcampos('PIECES', addFormPickUp)" class="form-text text-danger">Please set a PCs.</span> -->
+                                    </div>
+                                    <div class="col-lg-6 col-md-6">
+                                        <label for="Weigth" class="col-form-label">Weight</label>
+                                        <div class="input-group">
+                                            <input type="number" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" min="0" step="0.1" formControlName="WEIGHT" placeholder="Weight">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30%">
+                                                <ng-container *ngIf="canEdit && canEditShipment; else weightread;">
+                                                    <select formControlName="WEIGHTUNITCODE" style="margin: 0px; padding: 0px 0px 0px 6px; height: 100%; background-color: #f8f8f8;" class="btn-input-group">
+                                                        <option value="LB">LB</option>
+                                                        <option value="KG">KG</option>
+                                                    </select>
+                                                </ng-container>
+                                                <ng-template #weightread>
+                                                    <input type="text" [readOnly]="!canEdit || !canEditShipment" style="margin: 0px; padding: 0px; height: 100%; width: 100%" class="form-read btn-input-group" formControlName="WEIGHTUNITCODE">
+                                                </ng-template>
+
+                                            </div>
+                                        </div>
+                                        <span *ngIf="validarcampos('WEIGHT', addShipmentForm)" class="form-text text-danger">Please set a
+                                            Weight.</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-3 col-md-3">
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <label for="CARRIER" class="col-form-label">Carrier <label
+                                        class="text-danger font-weight-bolder">*</label></label>
+                                <ng-container *ngIf="canEdit && canEditShipment; else readSelect">
+                                    <select class="form-control" formControlName="CARRIER">
+                                        <option *ngFor="let option of carrierSelect" [value]="option.value">
+                                            {{option.text}} </option>
+                                    </select>
+                                </ng-container>
+                                <ng-template #readSelect>
+                                    <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" [value]="addShipmentForm.get('CARRIER').value + ' - ' + getCarrierByCode(addShipmentForm.get('CARRIER').value)">
+                                </ng-template>
+                                <span *ngIf="validarcampos('CARRIER', addShipmentForm)" class="text-danger">Please set a
+                                    Carrier.</span>
+                            </div>
+                            <div class="col-lg-3 col-md-3">
+                                <div class="form-group">
+                                    <label for="CustNotMail" class="col-form-label">Customer Notification
+                                        Email <label class="text-danger font-weight-bolder">*</label></label>
+                                    <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="CUSTOMERNOTIFEMAIL" placeholder="Email">
+                                    <span *ngIf="validarcampos('CUSTOMERNOTIFEMAIL', addShipmentForm)" class="form-text text-danger"> {{ getMessageError('CUSTOMERNOTIFEMAIL',
+                                        addShipmentForm, 'Email') }} </span>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2">
+                                <div class="form-group pt-1">
+                                    <label for="exampleDataList" class="col-form-label"> Second Dispatcher </label>
+                                    <ng-container *ngIf="canEdit && canEditShipment; else readSecondDistpacher">
+                                        <nz-select [style]="{'width' : '100%'}" nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="SECDISPATCHER">
+                                            <nz-option *ngFor="let user of listUsers" [nzLabel]="user['USER_ID']" [nzValue]="user['USER_ID']"></nz-option>
+                                        </nz-select>
+                                    </ng-container>
+                                    <ng-template #readSecondDistpacher>
+                                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="SECDISPATCHER">
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <ui5-title level="H3" class="text-left">Pick Ups</ui5-title>
+                            </div>
+                            <div class="col-lg-4" style="text-align: right;">
+                                <!--[disabled]="addShipmentForm.invalid"-->
+                                <ui5-button id="pickup" class="mr-2" [icon]="!isLoading[1] ? 'add' : ''" tooltip="Add" [disabled]="addShipmentForm.invalid || !canEdit || !canEditShipment" (click)="showModal('PICK UP','',1)">
+                                    <span *ngIf="isLoading[1]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                                </ui5-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <ui5-table class="demo-table table" id="table" style="text-align: left;" no-data-text="No Data">
+                            <!-- Columns -->
+                            <ng-container *ngFor="let column of columnsPickUps">
+                                <ui5-table-column *ngIf="column.watch == null" slot="columns">
+                                    <span style="line-height: 1.4rem"> {{column.title}} </span>
+                                </ui5-table-column>
+                            </ng-container>
+
+                            <ui5-table-row *ngFor="let item of listPickUps">
+                                <ng-container *ngFor="let column of columnsPickUps">
+                                    <ui5-table-cell *ngIf="column.watch == null">
+                                        <div *ngIf="column.select != null && column.select; else campoNormal">
+                                            <ui5-button class="btn-select" icon="edit" (click)="showModal('PICK UP', item['PICKUPID'])"> <span *ngIf="column.type === 'TEXT' || column.type === 'NUMBER'"> {{
+                                                    item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span> </ui5-button>
+                                        </div>
+                                        <ng-template #campoNormal>
+                                            <ng-container *ngIf="column.key != null && column.key.length > 0; else fieldNoData">
+                                                <span *ngIf="column.type === 'TEXT' || column.type === 'NUMBER'"> {{
+                                                    item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span>
+                                            </ng-container>
+                                            <ng-template #fieldNoData>
+                                                <div *ngIf="column.title === 'Actions'">
+                                                    <ui5-button icon="delete" style="height: 30px;" design="Transparent" [disabled]="!canEdit || !canEditShipment" (click)="confirmDelete('PICK UP', item['PICKUPID'])">
+                                                    </ui5-button>
+                                                </div>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ui5-table-cell>
+                                </ng-container>
+                            </ui5-table-row>
+                        </ui5-table>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <ui5-title level="H3" class="text-left">Deliveries</ui5-title>
+                            </div>
+                            <div class="col-lg-4" style="text-align: right;">
+                                <!--[disabled]="addShipmentForm.invalid"-->
+                                <ui5-button id="addPopoverButton" [icon]="!isLoading[2] ? 'add' : ''" tooltip="Add" [disabled]="addShipmentForm.invalid || !canEdit || !canEditShipment" class="mr-2" (click)="showModal('DELIVERY', '',2)">
+                                    <span *ngIf="isLoading[2]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                                </ui5-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <ui5-table class="demo-table table" id="table" no-data-text="No Data">
+                            <!-- Columns -->
+                            <ng-container *ngFor="let column of columnsDeliverys">
+                                <ui5-table-column *ngIf="column.watch == null" slot="columns">
+                                    <span style="line-height: 1.4rem"> {{column.title}} </span>
+                                </ui5-table-column>
+                            </ng-container>
+
+                            <ui5-table-row *ngFor="let item of listDeliverys">
+                                <ng-container *ngFor="let column of columnsDeliverys">
+                                    <ui5-table-cell *ngIf="column.watch == null">
+                                        <div *ngIf="column.select != null && column.select; else campoNormal">
+                                            <ui5-button class="btn-select" icon="edit" (click)="showModal('DELIVERY', item['DELIVERYID'])"> <span *ngIf="column.type === 'TEXT' || column.type === 'NUMBER'"> {{
+                                                    item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span> </ui5-button>
+                                        </div>
+                                        <ng-template #campoNormal>
+                                            <ng-container *ngIf="column.key != null && column.key.length > 0 && column.key !=='LASTPODUPLOADBY'; else fieldNoData">
+                                                <span *ngIf="column.type === 'TEXT' || column.type === 'NUMBER'"> {{
+                                                    item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span>
+                                            </ng-container>
+                                            <ng-template #fieldNoData>
+                                                <div *ngIf="column.title === 'Actions'">
+                                                    <ui5-button icon="delete" style="height: 30px;" design="Transparent" [disabled]="!canEdit || !canEditShipment" (click)="confirmDelete('DELIVERY', item['DELIVERYID'])">
+                                                    </ui5-button>
+                                                </div>
+                                                <div *ngIf="column.title === 'POD'">
+                                                    <div class="d-flex flex-row justify-content-center align-items-center text-center">
+                                                        <ui5-file-uploader (change)="uploadFile(item['DELIVERYID'],$event)" hide-input>
+                                                            <ui5-button [disabled]="item['UPLOADATTACHMENT']" style="height: 30px; width: 20px;" icon="upload-to-cloud"></ui5-button>
+                                                        </ui5-file-uploader>
+                                                        <ui5-link [disabled]="item['UPLOADATTACHMENT']" *ngIf="item['LASTPODUPLOADBY'] != null && item['LASTPODUPLOADBY'].length > 0" [href]="item['LASTPODUPLOADBY']" target="_blank">
+                                                            <ui5-button [disabled]="item['UPLOADATTACHMENT']" style="height: 30px; width: 20px;" icon="show"></ui5-button>
+                                                        </ui5-link>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ui5-table-cell>
+                                </ng-container>
+                            </ui5-table-row>
+                        </ui5-table>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <ui5-title level="H3" class="text-left">Carrier Cost</ui5-title>
+                            </div>
+                            <div class="col-lg-4" style="text-align: right;">
+                                <!--[disabled]="addShipmentForm.invalid"-->
+                                <ui5-button id="addPopoverButton" [icon]="!isLoading[3] ? 'add' : ''" class="mr-2" tooltip="Add" [disabled]="addShipmentForm.invalid || !canEdit || !canEditShipment" (click)="showModal('CARRIER COST','',3)">
+                                    <span *ngIf="isLoading[3]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                                </ui5-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <ui5-table class="demo-table table" id="table" style="text-align: left;" no-data-text="No Data">
+                            <!-- Columns -->
+                            <ng-container *ngFor="let column of columnsCarriers">
+                                <ui5-table-column *ngIf="column.watch == null" slot="columns">
+                                    <span style="line-height: 1.4rem"> {{column.title}} </span>
+                                </ui5-table-column>
+                            </ng-container>
+
+                            <ui5-table-row *ngFor="let item of listCarriers">
+                                <ng-container *ngFor="let column of columnsCarriers">
+                                    <ui5-table-cell *ngIf="column.watch == null">
+                                        <div *ngIf="column.select != null && column.select; else campoNormal">
+                                            <ui5-button class="btn-select" icon="edit" (click)="showModal('CARRIER COST', item['CARCOSTID'])">
+                                                <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'NUMBER'"> {{ column.key === 'AMOUNT' ? '$'
+                                                    : ''}} {{ item[column.key] | number: '1.2' }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span> </ui5-button>
+                                        </div>
+                                        <ng-template #campoNormal>
+                                            <ng-container *ngIf="column.key != null && column.key.length > 0; else fieldNoData">
+                                                <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'NUMBER'"> {{ column.key === 'AMOUNT' ? '$'
+                                                    : ''}} {{ item[column.key] | number: '1.2' }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span>
+                                            </ng-container>
+                                            <ng-template #fieldNoData>
+                                                <div *ngIf="column.title === 'Actions'">
+                                                    <ui5-button icon="delete" style="height: 30px;" design="Transparent" [disabled]="!canEdit || !canEditShipment" (click)="confirmDelete('CARRIER COST', item['CARCOSTID'])">
+                                                    </ui5-button>
+                                                </div>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ui5-table-cell>
+                                </ng-container>
+                            </ui5-table-row>
+                        </ui5-table>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <ui5-title level="H3" class="text-left">Customer Charges</ui5-title>
+                            </div>
+                            <div class="col-lg-4" style="text-align: right;">
+                                <!--[disabled]="addShipmentForm.invalid"-->
+                                <ui5-button id="addPopoverButton" [icon]="!isLoading[4] ? 'add' : ''" class="mr-2" tooltip="Add" [disabled]="addShipmentForm.invalid || !canEdit || !canEditShipment" (click)="showModal('CUSTOMER CHARGES', '',4)">
+                                    <span *ngIf="isLoading[4]" nz-icon [nzType]="'sync'" [nzSpin]="true" style="font-size: 15px; vertical-align: 0px;"></span>
+                                </ui5-button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <ui5-table class="demo-table table" id="table" style="text-align: left;" no-data-text="No Data">
+                            <!-- Columns -->
+                            <ng-container *ngFor="let column of columnsCustomerCharge">
+                                <ui5-table-column *ngIf="column.watch == null" slot="columns">
+                                    <span style="line-height: 1.4rem"> {{column.title}} </span>
+                                </ui5-table-column>
+                            </ng-container>
+
+                            <ui5-table-row *ngFor="let item of listCustomerCharges">
+                                <ng-container *ngFor="let column of columnsCustomerCharge">
+                                    <ui5-table-cell *ngIf="column.watch == null">
+                                        <div *ngIf="column.select != null && column.select; else campoNormal">
+                                            <ui5-button class="btn-select" icon="edit" (click)="showModal('CUSTOMER CHARGES', item['CHARGID'])">
+                                                <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'NUMBER'"> {{ column.key === 'AMOUNT' ? '$'
+                                                    : ''}} {{ item[column.key] | number: '1.2' }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span> </ui5-button>
+                                        </div>
+                                        <ng-template #campoNormal>
+                                            <ng-container *ngIf="column.key != null && column.key.length > 0; else fieldNoData">
+                                                <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                <span *ngIf="column.type === 'NUMBER'"> {{ column.key === 'AMOUNT' ? '$'
+                                                    : ''}} {{ item[column.key] | number: '1.2' }} </span>
+                                                <span *ngIf="column.type === 'DATE'"> {{ item[column.key] | date:
+                                                    'longDate' }} </span>
+                                            </ng-container>
+                                            <ng-template #fieldNoData>
+                                                <div *ngIf="column.title === 'Actions'">
+                                                    <ui5-button icon="delete" style="height: 30px;" design="Transparent" [disabled]="!canEdit || !canEditShipment" (click)="confirmDelete('CUSTOMER CHARGES', item['CHARGID'])">
+                                                    </ui5-button>
+                                                </div>
+                                            </ng-template>
+                                        </ng-template>
+                                    </ui5-table-cell>
+                                </ng-container>
+
+                            </ui5-table-row>
+                        </ui5-table>
+                    </div>
+                </div>
+                <div class="row" style="padding-top: 1%; padding-left: 2%; padding-right: 2%;">
+                    <div class="col-lg-8">
+                        <ui5-title level="H3" class="text-left">Attachments</ui5-title>
+                    </div>
+
+
+                    <ui5-tabcontainer class="full-width" style="height : 17rem">
+                        <ui5-tab text="Attachments ">
+                            <app-upload-attachments [files]="shipmentFiles" [objectID]="addShipmentForm.get('SHIPMENTID').value" [type]="8" [service]="shipmentService"></app-upload-attachments>
+
+                        </ui5-tab>
+                    </ui5-tabcontainer>
+                </div>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+<ui5-dialog #pickupModal style="width: 50%;">
+    <div slot="header" style="width: 100%;">
+        <div class="row justify-content-center align-items-center mt-2" style="width: 100%;">
+            <div class="col-lg-10 text-left" style="width: 100%;">
+                <h4 class="modal-title" id="modal-basic-title"> {{ titleModal | titlecase }} </h4>
+            </div>
+            <div class="col-lg-2 text-right" style="width: 100%;">
+                <ui5-button icon="decline" (click)="closeModal('PICK UP')"> </ui5-button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="addFormPickUp">
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="PickupDate" class="col-form-label">Pick up Date <label
+                                class="text-danger font-weight-bolder">*</label></label> <br>
+                        <ui5-datetime-picker [value]="addFormPickUp.get('PICKDATE').value" format-pattern="yyyy-MM-dd HH:mm" (change)="changeDateTime($event, 'PICKDATE', addFormPickUp)" [readOnly]="!canEdit || !canEditShipment" [ngClass]="{'form-read ' : !canEdit || !canEditShipment}"
+                            class="date-inp"></ui5-datetime-picker> <br>
+                        <!-- <input type="date" [readOnly]="!canEdit" class="form-read form-control" id="PickupDate" formControlName="PICKDATE" placeholder="Pick up Date"> -->
+                        <span *ngIf="validarcampos('PICKDATE', addFormPickUp)" class="text-danger">Please set a Pick up
+                            Date.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="EPUF" class=" col-form-label">E-P/U From <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="date" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="EPUF" formControlName="ETAFROM" placeholder="E-P/U From">
+                        <span *ngIf="validarcampos('ETAFROM', addFormPickUp)" class="text-danger">Please set a E-P/U
+                            From.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="EPUT" class=" col-form-label">E-P/U To <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="date" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="EPUT" formControlName="ETATO">
+                        <span *ngIf="validarcampos('ETATO', addFormPickUp)" class="form-text text-danger">Please set a
+                            E-P/U To.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group-row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <div class="row">
+                            <div class="col">
+                                <label for="PCs" class="col-form-label">PCs <label
+                                        class="text-danger font-weight-bolder">*</label></label>
+                                <input type="number" min="0.0" step="0.1" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="PCs" formControlName="PIECES" placeholder="PCs">
+                                <span *ngIf="validarcampos('PIECES', addFormPickUp)" class="form-text text-danger">Please set a PCs.</span>
+                            </div>
+                            <div class="col">
+                                <label for="Detail" class="col-form-label">Detail <label
+                                        class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="Detail" formControlName="DETAILS" placeholder="Detail">
+                                <span *ngIf="validarcampos('DETAILS', addFormPickUp)" class="form-text text-danger">Please set a Detail.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group-row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Weigth" class=" col-form-label">Weigth <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="number" min="0.0" step="0.1" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="WEIGHT" id="Weigth">
+                        <span *ngIf="validarcampos('WEIGHT', addFormPickUp)" class="form-text text-danger">Please set a
+                            Weight.</span>
+                    </div>
+                </div>
+                <div class="form-group-row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="PickupRef" class="col-form-label">Pick up Ref <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="PickupRef" formControlName="PICKUPREF" placeholder="Pick up Ref">
+                        <span *ngIf="validarcampos('PICKUPREF', addFormPickUp)" class="form-text text-danger">Please set
+                            a Pick up Ref.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl-12" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Comodity" class="col-form-label">Commodity <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[2].id !=
+                                    '' ? fieldsOVS[2].id : '-' }}</span>
+                            </div>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" (focus)="onChange($event, 2)" (input)="onChange($event, 2)" (blur)="sinEscribir($event, 2)" [nzAutocomplete]="commoditys" placeholder="Commodity" [(ngModel)]="fieldsOVS[2].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(2)" style="margin: 0px; padding: 0px; width: 30px; height: 100%; " [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon class="btn-input-icon"
+                                        name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #commoditys>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 2)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+
+                        <!-- <input type="text" class="form-control" id="Comodity" placeholder="Comodity">  -->
+                        <span *ngIf="validarcampos('COMMODITYID', addFormPickUp)" class="form-text text-danger">Please
+                            set a Commodity</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 1% 4% 1% 4%;">
+            <div class="col-xl-12" style="padding: 0% 4% 0% 4%;">
+                <hr style="background-color: (195,195,195,0.4); border-width: thin; border-style: solid;">
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Shipper" class=" col-form-label">Shipper <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[3].id !=
+                                    '' ? fieldsOVS[3].id : '-' }}</span>
+                            </div>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" (focus)="onChange($event, 3)" (input)="onChange($event, 3)" (blur)="sinEscribir($event, 3)" [nzAutocomplete]="shippers" placeholder="Shipper" [(ngModel)]="fieldsOVS[3].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(3)" style="margin: 0px; padding: 0px; width: 30px; height: 100%; " [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon class="btn-input-icon"
+                                        name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #shippers>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 3)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+                        <span *ngIf="validarcampos('SHIPPERID', addFormPickUp)" class="form-text text-danger">Please set
+                            a Shipper.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS1" class="col-form-label">Address #1 <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[5].id !=
+                                    '' ? fieldsOVS[5].id : '-' }}</span>
+                            </div>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" (focus)="onChange($event, 5)" (input)="onChange($event, 5)" (blur)="sinEscribir($event, 5)" [nzAutocomplete]="shippersaddress" placeholder="Address #1" [(ngModel)]="fieldsOVS[5].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(5)" style="margin: 0px; padding: 0px; width: 30px; height: 100%; " [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon class="btn-input-icon"
+                                        name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #shippersaddress>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 5)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+                        <!-- <input type="text" class="form-control" id="ADDRESS1" formControlName="ADRESS" placeholder="Address #1"> -->
+                        <span *ngIf="validarcampos('ADRESS', addFormPickUp)" class="form-text text-danger">Please set a
+                            Address.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="HOUSE NUMBER" class=" col-form-label">House Number</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="HOUSENUMBER" placeholder="House Number">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="CITY" class=" col-form-label">City</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="CITY" placeholder="City">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="CITY" class=" col-form-label">Country</label>
+                        <!-- <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="COUNTRY" placeholder="Country"> -->
+                        <nz-select [nzDisabled]="!canEdit || !canEditShipment" class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="COUNTRY">
+                            <nz-option *ngFor="let country of CountryList" [nzLabel]="country['code']" [nzValue]="country['code']"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="PHONE" class=" col-form-label">Phone <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="PHONE" formControlName="PHONE" placeholder="Phone">
+                        <span *ngIf="validarcampos('PHONE', addFormPickUp)" class="form-text text-danger">Please set a
+                            Phone.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="SEAL" class=" col-form-label">Seal #</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="SEAL" formControlName="SEAL" placeholder="Seal">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS2" class="col-form-label">Street</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" placeholder="Street" formControlName="STREET">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="STATE" class="col-form-label">State<label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <!-- <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" placeholder="State" formControlName="STATE"> -->
+                        <nz-select [nzDisabled]="!canEdit || !canEditShipment" class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="STATE">
+                            <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']" [nzValue]="states['code']"></nz-option>
+                        </nz-select>
+                        <span *ngIf="validarcampos('STATE', addFormPickUp)" class="form-text text-danger">Please set a
+                            State.</span>
+                    </div>
+                    <div class="col-xl">
+                        <label for="ZIPCODE" class="col-form-label">Zip Code<label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="ZIPCODE" placeholder="Zip Code" formControlName="ZIPCODE">
+                        <span *ngIf="validarcampos('ZIPCODE', addFormPickUp)" class="form-text text-danger">Please set a
+                            Zip Code.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS2" class="col-form-label">Address #2</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="ADDRESS2" formControlName="ADRESS2" placeholder="Address #2">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Contact" class=" col-form-label">Contact</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="Contact" placeholder="Contact" formControlName="CONTACT">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="NOTES" class="col-form-label">Notes</label>
+                        <textarea rows="3" nz-input [readOnly]="!canEdit || !canEditShipment" class="form-read" formControlName="NOTES"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="width: 100%; height: 65px;">
+        <div class="row justify-content-end align-items-end text-right mt-3" style="width: 100%;">
+            <div class="col-lg-12">
+                <ui5-button id="CreateMD1" class="mr-2" (click)="saveFormModal('PICK UP')" [disabled]="addFormPickUp.invalid || !canEdit || !canEditShipment">Save</ui5-button>
+                <ui5-button class="mr-2" (click)="closeModal('PICK UP')">Cancel</ui5-button>
+            </div>
+        </div>
+        <!-- <button type="button" (click)="modal.close('Save click')">Ok</button> -->
+    </div>
+</ui5-dialog>
+
+<ui5-dialog #deliveryModal style="width: 40%;">
+    <div slot="header" style="width: 100%;">
+        <div class="row justify-content-center align-items-center mt-2" style="width: 100%;">
+            <div class="col-lg-10 text-left" style="width: 100%;">
+                <h4 class="modal-title" id="modal-basic-title"> {{ titleModal | titlecase }} </h4>
+            </div>
+            <div class="col-lg-2 text-right" style="width: 100%;">
+                <ui5-button icon="decline" (click)="closeModal('DELIVERY')"> </ui5-button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="addFormDelivery">
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="DelDate" style="text-align: left;">Delivery Date <label
+                                class="text-danger font-weight-bolder">*</label></label> <br>
+                        <ui5-datetime-picker [value]="addFormDelivery.get('DELIVERYDATE').value" format-pattern="yyyy-MM-dd HH:mm" (change)="changeDateTime($event, 'DELIVERYDATE', addFormDelivery)" [readOnly]="!canEdit || !canEditShipment" [ngClass]="{'form-read ' : !canEdit || !canEditShipment}"
+                            class="date-inp"></ui5-datetime-picker> <br>
+                        <span *ngIf="validarcampos('DELIVERYDATE', addFormDelivery)" class="text-danger">Please set a
+                            Delivery Date.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="DelEta" style="text-align: left;">Delivery ETA<label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input id="DelEta" type="Date" formControlName="DELIVERYETA" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control date-inp">
+                        <span *ngIf="validarcampos('DELIVERYETA', addFormDelivery)" class="text-danger">Please set a
+                            Delivery ETA.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="DropOfFref" style="text-align: left;">Drop off Ref # <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="DropOfFref" formControlName="DROPOFFREF" />
+                        <span *ngIf="validarcampos('DROPOFFREF', addFormDelivery)" class="text-danger">Please set a Drop
+                            off Ref #.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group-row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="SignBy" style="text-align: left;">Sing By <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="SignBy" formControlName="SIGNBY" />
+                        <span *ngIf="validarcampos('SIGNBY', addFormDelivery)" class="form-text text-danger">Please set
+                            a Sign By.</span>
+                    </div>
+                </div>
+                <div class="form-group-row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <div class="row">
+                            <div class="col">
+                                <label for="PCs" class="col-form-label">PCs <label
+                                        class="text-danger font-weight-bolder">*</label></label>
+                                <input type="number" min="0.0" step="0.1" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="PCs" formControlName="PIECES" placeholder="PCs">
+                                <span *ngIf="validarcampos('PIECES', addFormDelivery)" class="form-text text-danger">Please set a PCs.</span>
+                            </div>
+                            <div class="col">
+                                <label for="Detail" class="col-form-label">Detail <label
+                                        class="text-danger font-weight-bolder">*</label></label>
+                                <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="Detail" formControlName="DETAILS" placeholder="Detail">
+                                <span *ngIf="validarcampos('DETAILS', addFormDelivery)" class="form-text text-danger">Please set a Detail.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 1% 4% 1% 4%;">
+            <div class="col-xl-12" style="padding: 0% 4% 0% 4%;">
+                <hr style="background-color: (195,195,195,0.4); border-width: thin; border-style: solid;">
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Consignee" class=" col-form-label">Consignee <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[4].id !=
+                                    '' ? fieldsOVS[4].id : '-' }}</span>
+                            </div>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" (focus)="onChange($event, 4)" (input)="onChange($event, 4)" (blur)="sinEscribir($event, 4)" [nzAutocomplete]="consignees" placeholder="Consignee" [(ngModel)]="fieldsOVS[4].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(4)" style="margin: 0px; padding: 0px; width: 30px; height: 100%;" [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon class="btn-input-icon"
+                                        name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #consignees>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 4)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+                        <span *ngIf="validarcampos('CONSIGNEEID', addFormDelivery)" class="form-text text-danger">Please
+                            set a Consignee.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS1" class="col-form-label">Address #1 <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <div class="input-group">
+                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[6].id !=
+                                    '' ? fieldsOVS[6].id : '-' }}</span>
+                            </div>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" (focus)="onChange($event, 6)" (input)="onChange($event, 6)" (blur)="sinEscribir($event, 6)" [nzAutocomplete]="consigneesAddress" placeholder="Address #1" [(ngModel)]="fieldsOVS[6].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(6)" style="margin: 0px; padding: 0px; width: 30px; height: 100%; " [disabled]="!canEdit || !canEditShipment" class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon class="btn-input-icon"
+                                        name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #consigneesAddress>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 6)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+                        <!-- <input type="text" class="form-control" id="ADDRESS1" formControlName="ADRESS" placeholder="Address #1"> -->
+                        <span *ngIf="validarcampos('ADRESS', addFormDelivery)" class="form-text text-danger">Please set
+                            a Address.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="HOUSE NUMBER" class=" col-form-label">House Number </label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" placeholder="House Number" formControlName="HOUSENUMBER">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="CITY" class=" col-form-label">City</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="CITY" placeholder="City">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="CITY" class=" col-form-label">Country</label>
+                        <!-- <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control"
+                            formControlName="COUNTRY" placeholder="Country"> -->
+                        <nz-select [nzDisabled]="!canEdit || !canEditShipment" class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="COUNTRY">
+                            <nz-option *ngFor="let country of CountryList" [nzLabel]="country['code']" [nzValue]="country['code']"></nz-option>
+                        </nz-select>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="PHONE" class=" col-form-label">Phone <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="PHONE" formControlName="PHONE" placeholder="Phone">
+                        <span *ngIf="validarcampos('PHONE', addFormDelivery)" class="form-text text-danger">Please set a
+                            Phone.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS2" class="col-form-label">Street</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" placeholder="Street" formControlName="STREET">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="STATE" class="col-form-label">State <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <!-- <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control"
+                            placeholder="State" formControlName="STATE"> -->
+                        <nz-select [nzDisabled]="!canEdit || !canEditShipment" class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="STATE">
+                            <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']" [nzValue]="states['code']"></nz-option>
+                        </nz-select>
+                        <span *ngIf="validarcampos('STATE', addFormDelivery)" class="form-text text-danger">Please set a
+                            State.</span>
+                    </div>
+                    <div class="col-xl">
+                        <label for="ZIPCODE" class="col-form-label">Zip Code <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="ZIPCODE" placeholder="Zip Code" formControlName="ZIPCODE">
+                        <span *ngIf="validarcampos('ZIPCODE', addFormDelivery)" class="form-text text-danger">Please set
+                            a Zip Code.</span>
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="ADDRESS2" class="col-form-label">Address #2</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="ADDRESS2" formControlName="ADRESS2" placeholder="Address #2">
+                    </div>
+                </div>
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="Contact" class=" col-form-label">Contact</label>
+                        <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" id="Contact" placeholder="Contact" formControlName="CONTACT">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="NOTES" class="col-form-label">Notes</label>
+                        <textarea rows="2" nz-input [readOnly]="!canEdit || !canEditShipment" class="form-read" formControlName="NOTES"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="width: 100%; height: 65px;">
+        <div class="row justify-content-end align-items-end text-right mt-3" style="width: 100%;">
+            <div class="col-lg-12">
+                <ui5-button id="CreateMD1" class="mr-2" (click)="saveFormModal('DELIVERY')" [disabled]="addFormDelivery.invalid || !canEdit || !canEditShipment">Save</ui5-button>
+                <ui5-button class="mr-2" (click)="closeModal('DELIVERY')">Cancel</ui5-button>
+            </div>
+        </div>
+        <!-- <button type="button" (click)="modal.close('Save click')">Ok</button> -->
+    </div>
+</ui5-dialog>
+
+<ui5-dialog #carrierModal style="width: 30%;">
+    <div slot="header" style="width: 100%;">
+        <div class="row justify-content-center align-items-center mt-2" style="width: 100%;">
+            <div class="col-lg-10 text-left" style="width: 100%;">
+                <h4 class="modal-title" id="modal-basic-title"> {{ titleModal | titlecase }} </h4>
+            </div>
+            <div class="col-lg-2 text-right" style="width: 100%;">
+                <ui5-button icon="decline" (click)="closeModal('CARRIER COST')"> </ui5-button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="addFormCarrierCost">
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="Category" show-colon style="text-align: left;">Category <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <ng-container *ngIf="canEdit && canEditShipment; else catRead">
+                            <select class="form-control" formControlName="CATEGORY">
+                                <option [value]="''">Not Selected</option>
+                                <option *ngFor="let category of carrierCostCatgeory" [value]="category.CATEGORY"> {{
+                                    category.DESCRIPTION }} </option>
+                            </select>
+                        </ng-container>
+                        <ng-template #catRead>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" [value]="addFormCarrierCost.get('CATEGORY').value  + ' - ' + getCategoryByCodeCarrierCost(addFormCarrierCost.get('CATEGORY').value)">
+                        </ng-template>
+                        <span *ngIf="validarcampos('CATEGORY', addFormCarrierCost)" class="text-danger">Please set a
+                            Category.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="Amount" show-colon style="text-align: left;">Amount <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="number" min="0.0" step="0.1" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="AMOUNT" />
+                        <span *ngIf="validarcampos('AMOUNT', addFormCarrierCost)" class="text-danger">Please set a
+                            Amount.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl" *ngIf="isFreightCharges()">
+                        <label class="label" for="Amount" show-colon style="text-align: left;">Percentage <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <select class="form-control text-right" formControlName="AMOUNTCURRENCY">
+                            <option *ngFor="let amount of amountCurrencyCarCost" [value]="amount"> {{amount}} </option>
+                        </select>
+                        <span *ngIf="validarcampos('AMOUNTCURRENCY', addFormCarrierCost)" class="text-danger">Please set
+                            a Amount.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="NOTES" class="col-form-label">Notes</label>
+                        <textarea rows="2" nz-input [readOnly]="!canEdit || !canEditShipment" class="form-read" formControlName="NOTES"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="width: 100%; height: 65px;">
+        <div class="row justify-content-end align-items-end text-right mt-3" style="width: 100%;">
+            <div class="col-lg-12">
+                <ui5-button id="CreateMD1" class="mr-2" (click)="saveFormModal('CARRIER COST')" [disabled]="addFormCarrierCost.invalid || !canEdit || !canEditShipment">Save</ui5-button>
+                <ui5-button class="mr-2" (click)="closeModal('CARRIER COST')">Cancel</ui5-button>
+            </div>
+        </div>
+        <!-- <button type="button" (click)="modal.close('Save click')">Ok</button> -->
+    </div>
+</ui5-dialog>
+
+<ui5-dialog #customerChargesModal style="width: 30%;">
+    <div slot="header" style="width: 100%;">
+        <div class="row justify-content-center align-items-center mt-2" style="width: 100%;">
+            <div class="col-lg-10 text-left" style="width: 100%;">
+                <h4 class="modal-title" id="modal-basic-title"> {{ titleModal | titlecase }} </h4>
+            </div>
+            <div class="col-lg-2 text-right" style="width: 100%;">
+                <ui5-button icon="decline" (click)="closeModal('CUSTOMER CHARGES')"> </ui5-button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="addFormCustomerCharges">
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="Category" show-colon style="text-align: left;">Category <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <ng-container *ngIf="canEdit && canEditShipment; else catRead">
+                            <select class="form-control" formControlName="CATEGORY">
+                                <option [value]="''">Not Selected</option>
+                                <option *ngFor="let category of customerChargeCategory" [value]="category.CATEGORY"> {{
+                                    category.DESCRIPTION }} </option>
+                            </select>
+                        </ng-container>
+                        <ng-template #catRead>
+                            <input type="text" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" [value]="addFormCarrierCost.get('CATEGORY').value  + ' - ' + getCategoryByCodeCustomerCharge(addFormCarrierCost.get('CATEGORY').value)">
+                        </ng-template>
+                        <span *ngIf="validarcampos('CATEGORY', addFormCustomerCharges)" class="text-danger">Please set a
+                            Category.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl-12" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" for="Amount" show-colon style="text-align: left;">Amount <label
+                                class="text-danger font-weight-bolder">*</label></label>
+                        <input type="number" min="0.0" step="0.1" [readOnly]="!canEdit || !canEditShipment" class="form-read form-control" formControlName="AMOUNT" />
+                        <span *ngIf="validarcampos('AMOUNT', addFormCustomerCharges)" class="text-danger">Please set a
+                            Amount.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label for="NOTES" class="col-form-label">Notes</label>
+                        <textarea rows="2" nz-input [readOnly]="!canEdit || !canEditShipment" class="form-read" formControlName="NOTES"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="width: 100%; height: 65px;">
+        <div class="row justify-content-end align-items-end text-right mt-3" style="width: 100%;">
+            <div class="col-lg-12">
+                <ui5-button id="CreateMD1" class="mr-2" (click)="saveFormModal('CUSTOMER CHARGES')" [disabled]="addFormCustomerCharges.invalid || !canEdit || !canEditShipment">Save</ui5-button>
+                <ui5-button class="mr-2" (click)="closeModal('CUSTOMER CHARGES')">Cancel</ui5-button>
+            </div>
+        </div>
+        <!-- <button type="button" (click)="modal.close('Save click')">Ok</button> -->
+    </div>
+</ui5-dialog>
+
+<app-modal-dropdown [ovsSelected]="fieldOVSSelected" [watchOVS]="watchOVS" (actionClose)="closeModalDropdown($event)" [columns]="columnsSelected" [list]="listMSelected" [fieldSearch]="valueField" (actionUpdateInfo)="listSelected($event, true)" (fieldSelected)="changeField($event)">
+</app-modal-dropdown>

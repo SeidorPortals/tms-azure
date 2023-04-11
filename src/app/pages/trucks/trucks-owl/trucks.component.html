@@ -1,0 +1,95 @@
+<div class="wrapper">
+    <!-- Header -->
+
+    <ui5-bar design="Header">
+        <h3 class="card-title" slot="startContent">Trucks </h3>
+
+    </ui5-bar>
+    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+        <ui5-input id="searchInput" slot="endContent" placeholder="Search by Truck..." style="width: 75%">
+            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+        </ui5-input>
+        <ui5-button icon="add" design="Transparent" tooltip="Create New Trip" slot="endContent" routerLink="/new-truck/.!">
+            New</ui5-button>
+
+    </ui5-bar>
+    <div class="body">
+        <ui5-table class="demo-table" no-data-text="No Data" id="table">
+            <!-- Columns -->
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Number</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Make</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Year</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">License Plate</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Anual Inspection</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Weight</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Monitoring</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Model</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">ID number</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Actions</span>
+            </ui5-table-column>
+
+            <ui5-table-row *ngFor="let lineIt of ObjList; let i = index" class="ui-table-row-root">
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.TRUCKNUMBER}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.MAKE}}</span>
+                </ui5-table-cell>
+
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.TYEAR}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.LICENSEPLATE}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.ANNUALINSPECTION}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.WEIGHT}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.MONITOR}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span></span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span></span>
+                </ui5-table-cell>
+                <ui5-button icon="edit" design="Transparent"
+                        [routerLink]="['/new-truck', lineIt.TRUCKNUMBER]">
+                    </ui5-button>
+            </ui5-table-row>
+        </ui5-table>
+    </div>
+</div>

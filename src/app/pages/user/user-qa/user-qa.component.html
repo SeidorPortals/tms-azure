@@ -1,0 +1,278 @@
+<nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+    <div class="row">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            crossorigin="anonymous">
+            
+            <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+            <div class="col-lg">
+                <div class="card card-user">
+                    <div class="card-header">
+                        <ui5-bar design="Driver">
+                            <h3 class="card-title" slot="startContent">User: </h3>
+                            <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="statusValid"
+                            (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                            </app-btn-status>
+                            <ui5-button icon="complete" tooltip="Save and Close" slot="endContent"
+                                (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                            </ui5-button>
+                            <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true"
+                                [disabled]="addForm.invalid">Save
+                            </ui5-button>
+                            <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/users">Cancel
+                            </ui5-button>
+                        </ui5-bar>
+                        <h6 class="card-title pl-4 pt-4">Status: {{vs.getStatusByCode(numberStatus)}}</h6>
+                    </div>
+                    <div class="card-body" style="padding-left: 2%;">
+                        <div class="form-row">
+                            <div class="col-md-3">
+                                <h5 class="card-title">General Information</h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="Name">Name <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control input-fi" id="Name" formControlName="NOMBRE"
+                                            placeholder="">
+                                        <span *ngIf="validarcampos('NOMBRE', addForm)" class="form-text text-danger">Please
+                                            set a name</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="UserID">User ID <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="UserID" type="name" class="input-fi form-control" placeholder=""
+                                            id="USER_ID" formControlName="USER_ID" oninput="this.value = this.value.toUpperCase().trim()">
+                                        <span *ngIf="validarcampos('USER_ID', addForm)" class="form-text text-danger">User
+                                            ID
+                                            Mandatory</span>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-3  pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="Email">Email <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control input-fi" id="Email" formControlName="EMAIL"
+                                            placeholder="">
+                                        <span *ngIf="validarcampos('EMAIL', addForm)" class="form-text text-danger">Please
+                                            set
+                                            an email.</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Name">Password <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="password" class="form-control input-fi" id="PASSWORD"
+                                            formControlName="PASSWORD" placeholder="">
+                                        <span *ngIf="validarcampos('PASSWORD', addForm)"
+                                            class="form-text text-danger">Please
+                                            set a password of at least 5 characters</span>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-3 pt-4">
+                                <h5 class="card-title"></h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="BYDEMPLOYEE">ByD Employee ID <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control input-fi" id="BYDEMPLOYEE"
+                                            formControlName="BYD_EMPLOYEE" placeholder="">
+                                        <span *ngIf="validarcampos('BYD_EMPLOYEE', addForm)"
+                                            class="form-text text-danger">Please
+                                            set an ID</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="Role">Role <label class="text-danger font-weight-bolder">*</label></label>
+                                        <div class="input-group" style="margin-top: 0%; margin-bottom: 2%;">
+                                            <div class="input-group-prepend"
+                                                style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                    fieldsOVS[1].id != '' ? fieldsOVS[1].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" class="form-control input-fi" (focus)="onChange($event, 1)"
+                                                (input)="onChange($event, 1)" (blur)="sinEscribir($event, 1)"
+                                                [nzAutocomplete]="roles" placeholder="Role" [(ngModel)]="fieldsOVS[1].name"
+                                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button (click)="listSelected(1)"
+                                                    style="margin: 0px; padding: 0px; width: 30px; "
+                                                    class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                    <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #roles>
+                                                <ng-container
+                                                    *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM"
+                                                        [attr.data-id]="getOption(option,'ID')"
+                                                        [attr.data-name]="getOption(option,'NAME')"
+                                                        [nzValue]="getOption(option, 'NAME')"
+                                                        (selectionChange)="suggestionSelected($event, 1)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                        </div>
+                                        <!-- <input type="text" class="form-control input-fi"  placeholder="Role" formControlName="ROLE_ID" > -->
+                                        <span *ngIf="validarcampos('ROLE_ID', addForm)" class="form-text text-danger">Please
+                                            set
+                                            a
+                                            Role.</span>
+                                    </div>
+                                </div>
+                            </div>
+    
+                        </div>
+                        <div class="row" style="padding-top: 1%; ">
+                            <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-lg-8">
+                                        <ui5-title level="H3" class="text-left">Details</ui5-title>
+                                    </div>
+                                    <div class="col-lg-4" style="text-align: right;">
+                                        <ui5-button id="addPopoverButton" icon="add" class="mr-2" tooltip="Add"
+                                            (click)="showModal('DETAILS')"></ui5-button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <ui5-table class="demo-table table" id="table" style="text-align: left;"
+                                    no-data-text="No Data">
+                                    <!-- Columns -->
+                                    <ng-container *ngFor="let column of columnsFinDetails">
+                                        <ui5-table-column *ngIf="column.watch == null" slot="columns">
+                                            <span style="line-height: 1.4rem"> {{column.title}} </span>
+                                        </ui5-table-column>
+                                    </ng-container>
+    
+                                    <ui5-table-row *ngFor="let item of listFinDetails">
+                                        <ng-container *ngFor="let column of columnsFinDetails">
+                                            <ui5-table-cell *ngIf="column.watch == null">
+                                                <div *ngIf="column.select != null && column.select; else campoNormal">
+                                                    <ui5-button class="btn-select" icon="edit"
+                                                        (click)="showModal('DETAILS', item['USERSFINDETAILSID'])">
+                                                        <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                    </ui5-button>
+                                                </div>
+                                                <ng-template #campoNormal>
+                                                    <ng-container
+                                                        *ngIf="column.key != null && column.key.length > 0; else fieldNoData">
+                                                        <span *ngIf="column.type === 'TEXT'"> {{ item[column.key] }} </span>
+                                                    </ng-container>
+                                                    <ng-template #fieldNoData>
+                                                        <div *ngIf="column.title === 'Actions'">
+                                                            <ui5-button icon="delete" style="height: 30px;"
+                                                                (click)="confirmDelete('DETAILS', item['USERSFINDETAILSID'])">
+                                                            </ui5-button>
+                                                        </div>
+                                                    </ng-template>
+                                                </ng-template>
+                                            </ui5-table-cell>
+                                        </ng-container>
+    
+                                    </ui5-table-row>
+                                </ui5-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Cierre card -->
+            <div class="row">
+            </div>
+        </form>
+    </div>
+</nz-spin>
+
+
+<ui5-dialog #details style="width: 40%;">
+    <div slot="header" style="width: 100%;">
+        <div class="row justify-content-center align-items-center mt-2" style="width: 100%;">
+            <div class="col-lg-10 text-left" style="width: 100%;">
+                <h4 class="modal-title" id="modal-basic-title"> {{ titleModal | titlecase }} </h4>
+            </div>
+            <div class="col-lg-2 text-right" style="width: 100%;">
+                <ui5-button icon="decline" (click)="closeModal('DETAILS')"> </ui5-button>
+            </div>
+        </div>
+    </div>
+    <form [formGroup]="addFinDetails">
+        <div class="row" style="padding: 0% 4% 0% 4%;">
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 0%;">
+                    <div class="col-xl">
+                        <label class="label" show-colon style="text-align: left;" for="Company">Company</label>
+                        <div class="input-group" style="margin-top: 0%; margin-bottom: 2%;">
+                            <div class="input-group-prepend"
+                                style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{ fieldsOVS[0].id !=
+                                    '' ? fieldsOVS[0].id : '-' }}</span>
+                            </div>
+                            <input type="text" class="form-control" (focus)="onChange($event, 0)"
+                                (input)="onChange($event, 0)" (blur)="sinEscribir($event, 0)"
+                                [nzAutocomplete]="companys" placeholder="Company" [(ngModel)]="fieldsOVS[0].name"
+                                [ngModelOptions]="{ standalone: true }" aria-describedby="button-addon2">
+                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                <button (click)="listSelected(0)" style="margin: 0px; padding: 0px; width: 30px; "
+                                    class="form-btn btn-input-group" type="button" id="button-addon2"> <ui5-icon
+                                        class="btn-input-icon" name="value-help"></ui5-icon>
+                                </button>
+                            </div>
+                            <nz-autocomplete #companys>
+                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                    <nz-auto-option *ngFor="let option of listSuggestionsM"
+                                        [attr.data-id]="getOption(option,'ID')"
+                                        [attr.data-name]="getOption(option,'NAME')"
+                                        [nzValue]="getOption(option, 'NAME')"
+                                        (selectionChange)="suggestionSelected($event, 0)">
+                                        {{ getOption(option,'OPTION') }}
+                                    </nz-auto-option>
+                                </ng-container>
+                            </nz-autocomplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xl">
+                        <label class="label" for="ACCASSIGMENT" show-colon style="text-align: left;">Account
+                            Assignment</label>
+                        <input type="text" class="form-control" formControlName="ACCASSIGMENT"
+                            placeholder="Account Assignment">
+                        <span *ngIf="validarcampos('ACCASSIGMENT', addFinDetails)" class="text-danger">Please set a
+                            Account Assignment.</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6" style="padding: 0% 4% 0% 4%;">
+                <div class="form-group row" style="margin-top: 0%; margin-bottom: 2%;">
+                    <div class="col-xl">
+                        <label class="label" for="MANAGER" show-colon style="text-align: left;">Manager</label>
+                        <input type="text" class="form-control" formControlName="MANAGER" />
+                        <span *ngIf="validarcampos('MANAGER', addFinDetails)" class="text-danger">Please set a
+                            Manager.</span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-xl">
+                        <label class="label" for="COSTOBJECT" show-colon style="text-align: left;">Cost Object</label>
+                        <input type="text" class="form-control" formControlName="COSTOBJECT" placeholder="Cost Object">
+                        <span *ngIf="validarcampos('COSTOBJECT', addFinDetails)" class="text-danger">Please set a Cost
+                            Object.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div slot="footer" style="width: 100%; height: 65px;">
+        <div class="row justify-content-end align-items-end text-right mt-3" style="width: 100%;">
+            <div class="col-lg-12">
+                <ui5-button id="CreateMD1" class="mr-2" (click)="saveFormModal('DETAILS')"
+                    [disabled]="addFinDetails.invalid">Save</ui5-button>
+                <ui5-button class="mr-2" (click)="closeModal('DETAILS')">Cancel</ui5-button>
+            </div>
+        </div>
+    </div>
+</ui5-dialog>
+
+<app-modal-dropdown [ovsSelected]="fieldOVSSelected" [index]="indexSelected" [watchOVS]="watchOVS"
+    (actionClose)="closeModalDropdown($event)" [columns]="columnsSelected" [list]="listMSelected"
+    [fieldSearch]="valueField" (actionUpdateInfo)="listSelected($event, true)" (fieldSelected)="changeField($event)">
+</app-modal-dropdown>

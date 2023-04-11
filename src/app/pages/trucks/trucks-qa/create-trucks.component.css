@@ -1,0 +1,124 @@
+html,
+body {
+    height: 100%;
+}
+
+#container {
+    min-height: 100%;
+    position: relative;
+}
+
+#header {
+    position: absolute;
+    width: 100%;
+}
+
+#body {
+    padding: -3rem 1rem;
+    border: 0.0625rem solid #C1C1C1;
+    border-bottom: none;
+    /* Height of the footer */
+}
+
+#footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+    /* Height of the footer */
+    background: #6cf;
+}
+
+.snippet {
+    padding: 3rem 3.5rem;
+    border: 0.0625rem solid #C1C1C1;
+    background-color: var(--sapBackgroundColor);
+}
+
+.title {
+    border: 0.0625rem solid #C1C1C1;
+    border-bottom: none;
+    background-color: var(--sapBackgroundColor);
+    padding-right: 3%;
+    padding-top: 1%;
+    padding-left: 2.5%;
+}
+
+.label {
+    padding-right: 3%;
+    padding-bottom: 1%;
+    text-align: left;
+}
+
+.rightAlign {
+    /* padding-right: 50%; */
+    width: 80%
+}
+
+.table {
+    border: 0.0625rem solid #C1C1C1;
+    border-bottom: none;
+    background-color: var(--sapBackgroundColor);
+    width: 98%;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+.text-left {
+    padding-bottom: 2%;
+    font-weight: bold;
+}
+
+.host {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-fi{
+    height: 2.2rem;
+}
+
+.address-inp{
+    height: 2rem;
+}
+
+.date-inp{
+    height: 2rem;
+    width: 55%;
+}
+
+.btn-input-group {
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    background-color: #ffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-group:hover{
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-icon:hover{
+    color: #0854a0;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+input[type=number] { appearance: textfield; }

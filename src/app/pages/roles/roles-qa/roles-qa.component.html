@@ -1,0 +1,69 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+
+        <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+            <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+                <div class="col-lg">
+                    <div class="card card-user">
+                        <div class="card-header">
+                            <ui5-bar design="Driver">
+                                <h3 class="card-title" slot="startContent">Role </h3>
+                                <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="addForm.invalid"
+                                (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                                </app-btn-status>
+                                <ui5-button icon="complete" tooltip="Save and Close" slot="endContent"
+                                    (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                                </ui5-button>
+                                <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true"
+                                    [disabled]="addForm.invalid">Save
+                                </ui5-button>
+                                <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/roles">Cancel
+                                </ui5-button>
+                            </ui5-bar>
+                            <h6 class="card-title pl-4 pt-2">Status: {{vs.getStatusByCode(numberStatus)}}</h6>
+                        </div>
+                        <div class="card-body" style="padding-left: 2%;">
+                            <div class="form-row">
+                                <div class="col-md-2">
+                                    <h5 class="card-title">General Information</h5>
+                                    <div class="form-group">
+                                        <div class="pb-1 pl-2">
+                                            <label for="ROLE_ID">Role ID <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input id="ROLE_ID" type="name" class="input-fi form-control"
+                                                placeholder="" id="ROLE_ID" formControlName="ROLE_ID" >
+                                            <span *ngIf="validarcampos('ROLE_ID')" class="form-text text-danger">Role ID
+                                                Mandatory</span>
+                                        </div>
+                                        <div class="pb-1 pl-2">
+                                            <label for="ROLE_NAME">Role Name <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control input-fi" id="Name" formControlName="ROLE_NAME"
+                                                placeholder="">
+                                            <span *ngIf="validarcampos('ROLE_NAME')" class="form-text text-danger">Please set a role name</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 pt-4">
+                                    <h5 class="card-title"> </h5>
+                                    <div class="form-group">
+                                       
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-lg-2 pt-4">
+                                    <h5 class="card-title"> </h5>
+                                    
+                                    <div class="form-group" style="width: 90%;" >
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Cierre card -->
+                <div class="row">
+                </div>
+            </form>
+        </nz-spin>
+    
+</div>

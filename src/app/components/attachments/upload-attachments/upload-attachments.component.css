@@ -1,0 +1,9 @@
+.form-btn:disabled{
+    background-color: #f5f5f5;
+    cursor: default;
+}
+
+.btn-uploader{
+    position: relative;
+    bottom: 10px;
+}

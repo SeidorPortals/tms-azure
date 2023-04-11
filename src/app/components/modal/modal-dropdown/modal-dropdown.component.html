@@ -1,0 +1,49 @@
+<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+crossorigin="anonymous">
+
+<div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px; height: 100%;">
+    <button  (click)="openModalDropdown()"   style="margin: 0px; padding: 0px; width: 30px; height: 100%;" class="btn-input-group" 
+    type="button" id="button-addon2">   <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+    </button>
+</div> -->
+
+<ui5-dialog #modalDropdown id="modalDropdown" style="width: 40%; height: 400px;">
+    <div slot="header" style="width: 100%;" >
+        <div class="row mt-2">
+            <div class="col-lg-8 col-xl-8 col-sm-8 col-md-8">
+                <ui5-input  style="width: 100%;" placeholder="Search" [value]="fieldSearch" (change)="changeSearchInput($event)" >
+                </ui5-input>
+            </div>
+            <div class="col-lg-2 col-xl-2 col-sm-2 col-md-2 text-center">
+                <ui5-button icon="search" tooltip="Search" (click)="filterSearch()" ></ui5-button> <!--(click)="showInformationSelect()"-->
+            </div>
+                     
+    <div class="col-lg-2 col-xl-2 col-sm-2 col-md-2 text-center">
+        <ui5-button icon="decline" (click)="closeModalDropdown()"> </ui5-button>
+   </div> 
+        </div>
+    </div>
+    <div class="row justify-content-center align-items-center" >
+        <div class="col-lg-12">
+            <ui5-table #tablem mode="SingleSelect" no-data-text="No data" (selection-change)="selectItemModalDropdown($event)" >
+                <!-- Columns  min-width="800"-->
+                <ui5-table-column slot="columns" *ngFor="let column of columns;"  [style]="column.style">
+                    <span style="line-height: 1.4rem"> {{column.name}} </span>
+                </ui5-table-column>
+
+                <ui5-table-row *ngFor="let item of listFilter;">
+                    <ui5-table-cell *ngFor="let column of columns" [attr.data-column]="column.name" [style]="column.style">
+                        <span> {{item[column.key]}} </span>
+                    </ui5-table-cell>
+                </ui5-table-row>
+            </ui5-table>
+        </div>
+    </div>
+    <div slot="footer" style="width: 100%;">
+        <div class="row mt-2" style="width: 100%;">  
+            <div class="col-lg-12 col-xl-12 col-sm-12 col-md-12 text-left" style="width: 100%;">
+                <h6 class="modal-title">Select a {{ ovsSelected.title | titlecase }} </h6>
+            </div>
+        </div>
+    </div>
+</ui5-dialog>

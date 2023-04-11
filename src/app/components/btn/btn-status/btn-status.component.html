@@ -1,0 +1,7 @@
+<ui5-button  #btnOpenBasic icon="slim-arrow-left" (click)="openMenu()" [disabled]="isValidForm"
+  >Change status</ui5-button> 
+<ui5-menu #menuBasic (item-click)="changeStatus($event)" >
+    <ng-container *ngFor="let item of vs.statusData">
+        <ui5-menu-item *ngIf="item.watch"  [text]="item.text" [attr.data-number]="item.number"  ></ui5-menu-item>
+    </ng-container>
+</ui5-menu>

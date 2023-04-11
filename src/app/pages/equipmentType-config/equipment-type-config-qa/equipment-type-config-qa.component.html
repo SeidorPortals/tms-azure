@@ -1,0 +1,57 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+
+    <form [formGroup]="addEquipmentForm" (ngSubmit)="actionsave(addEquipmentForm,1)" autocomplete="off">
+        <div class="col-md">
+            <div class="card card-user">
+                <div class="card-header">
+
+                    <ui5-bar design="Driver">
+                        <h3 class="card-title" slot="startContent">Equipment Type </h3>
+
+                        <!--<ui5-button icon="edit" tooltip="Save" slot="endContent" type="submit" submits="true" (click)="actionsave()">Save
+                    </ui5-button>-->
+                        <!-- <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" 
+                    (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                    </app-btn-status> -->
+                        <ui5-button icon="complete" tooltip="Save" slot="endContent" (click)="actionsave(addEquipmentForm,2)" [disabled]="addEquipmentForm.invalid">Save and Close
+                        </ui5-button>
+                        <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addEquipmentForm.invalid">Save
+                        </ui5-button>
+
+                        <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/equipmenttypes">Cancel
+                        </ui5-button>
+                    </ui5-bar>
+                    <h6 class="pl-3 card-title">Status: {{vs.getStatusByCode(numberStatus)}} </h6>
+                </div>
+                <div class="card-body">
+                    <!-- <form [formGroup]="addEquipmentForm" (submit)="createEquipment()"> -->
+
+                    <div class="form-row">
+
+                        <div class="col-md-4">
+                            <h5 class="card-title">General Information</h5>
+                            <div class="form-group">
+                                <div class="pb-1 pl-2">
+                                    <label for="equpTyid">Equipment Type ID</label>
+                                    <input id="equpTyid" type="text" class="form-control" placeholder="  ID" disabled formControlName="EQUIPMENTTYPEID" name="id">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="pb-1 pl-2">
+                                    <label for="description">Description<label class="text-danger font-weight-bolder">*</label></label>
+                                    <input id="description" type="name" class="form-control" placeholder="  Description" formControlName="DESCRIPTION" name="DESCRIPTION">
+                                    <span *ngIf="validarcampos('DESCRIPTION')" class="form-text text-danger">Description Mandatory</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </form> 
+                    [(ngModel)]="equiptype.EQUIPMENTTYPEID"
+                    [(ngModel)]="equiptype.DESCRIPTION"
+                -->
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

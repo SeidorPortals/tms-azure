@@ -1,0 +1,40 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+        <div class="col-md">
+            <div class="card card-user">
+                <div class="card-header">
+                    <ui5-bar design="Driver">
+                        <h3 class="card-title" slot="startContent">Scrow Type </h3>
+                        <ui5-button icon="complete" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                        </ui5-button>
+                        <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addForm.invalid">Save
+                        </ui5-button>
+                        <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/scrowtype">Cancel
+                        </ui5-button>
+                    </ui5-bar>
+                    <!-- <h6 class="pl-3 card-title">Status: </h6> -->
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-3 ">
+                            <h5 class="card-title">General Information</h5>
+                            <div class="form-group">
+                                <div class="pb-1 pl-2 pt-1">
+                                    <label for="comodityid">Scrow Type ID<label class="text-danger font-weight-bolder">*</label></label>
+                                    <input id="comodityid" type="text" class="form-control" placeholder="ID" formControlName="SCROWTYPE" name="id">
+                                    <span *ngIf="validarcampos('SCROWTYPE')" class="form-text text-danger">Scrow Type Mandatory</span>
+                                </div>
+                                <div class="pb-1 pl-2">
+                                    <label for="description">Description<label class="text-danger font-weight-bolder">*</label></label>
+                                    <input id="description" type="text" class="form-control" placeholder="Description" formControlName="DESCRIPTION" name="DESCRIPTION">
+                                    <span *ngIf="validarcampos('DESCRIPTION')" class="form-text text-danger">Description Mandatory</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

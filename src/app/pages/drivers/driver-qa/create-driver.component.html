@@ -1,0 +1,601 @@
+<div class="row">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+        <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+        <fieldset [disabled]="this.numberStatus == 2">
+            <div class="col-md">
+                <div class="card card-user">
+                    <div class="card-header">
+                        <ui5-bar design="Driver">
+                            <h3 class="card-title" slot="startContent">Drivers </h3>
+                            <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="statusValid" (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                            </app-btn-status>
+                            <ui5-button icon="complete" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                            </ui5-button>
+                            <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addForm.invalid">Save
+                            </ui5-button>
+                            <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/drivers">Cancel
+                            </ui5-button>
+                        </ui5-bar>
+                        <h6 class="pl-4 card-title">Status: {{vs.getStatusByCode(numberStatus)}} </h6>
+                    </div>
+                    <div class="card-body" style="padding-left: 2%;">
+
+                        <div class="form-row">
+                            <div class="col-md">
+                                <h5 class="card-title">General Information</h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="name">Name <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="name" type="name" class="form-control input-fi" placeholder="  Name" formControlName="NAME">
+                                        <span *ngIf="validarcampos('NAME')" class="form-text text-danger">Name
+                                            Mandatory</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="employeenum">Employee number <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="employeenum" [readonly]="saved" type="text" class="form-control input-fi" placeholder="  Employee No" value="" formControlName="DRIVERID">
+                                        <!-- <span *ngIf="validarcampos('DRIVERID')" class="form-text text-danger">Enployee
+                                            Mandatory</span> -->
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="payname">Payee Name <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="payname" type="name" class="form-control input-fi" placeholder="PAYEENAME" formControlName="PAYEENAME">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="BirthDate">Birth Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="BirthDate" type="Date" class="form-control date-inp" formControlName="BIRTHDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="SocialSecurity">Social Security # <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="SocialSecurity" mask="000-00-0000" class="form-control input-fi" placeholder="AAA-GG-SSSS" formControlName="SOCIALSECURITY">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="email">Email address</label>
+                                        <input type="email" class="form-control input-fi" placeholder="  Email" formControlName="EMAIL">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <h5 class="card-title">Address</h5>
+                                <div class="form-group">
+
+                                    <div class="form-row pb-1">
+                                        <div class="col-md-5">
+                                            <label>House Number <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control" placeholder="House Number" value="" formControlName="HOUSENUMBER">
+                                        </div>
+                                        <div class="col-md-7">
+                                            <label>Street <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control" placeholder="Street" value="" formControlName="STREET">
+                                        </div>
+                                    </div>
+                                    <div class="pl-0 pb-1">
+                                        <label>Address Line 1</label>
+                                        <input type="text" class="form-control" placeholder="Address" value="" formControlName="ADRESS">
+                                    </div>
+
+                                    <div class="form-row pb-1">
+
+                                        <div class="col-md-5">
+                                            <label>City <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control" placeholder=" City" value="" formControlName="CITY">
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <label>State <label class="text-danger font-weight-bolder">*</label></label>
+                                            <!-- <input type="text" class="form-control address-inp" placeholder=" State" value="" formControlName="STATE"> -->
+                                            <!-- <select type="text" class="custom-select" placeholder="Select Customer" formControlName="STATE">
+                                                <option *ngFor="let region of RegionList" [value]="region.name">({{region.name}})</option>
+                                            </select> -->
+                                            <nz-select class="form-control pt-0 pl-0 pb-0" autocomplete="off" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="STATE">
+                                                <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']" [nzValue]="states['code']"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Zip <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control" style="width: 90%;" placeholder="" value="" formControlName="ZIPCODE">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 pl-0">
+                                        <label>Country <label class="text-danger font-weight-bolder">*</label></label>
+                                        <!-- <input type="text" class="form-control address-inp" placeholder="Country" value="" formControlName="COUNTRY"> -->
+                                        <!-- <select type="text" class="custom-select" placeholder="Country" formControlName="COUNTRY">
+                                            <option *ngFor="let country of CountryList" [value]="country.name">({{country.name}})</option>
+                                        </select> -->
+                                        <nz-select  class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="" nzSize="large" formControlName="COUNTRY">
+                                            <nz-option  *ngFor="let country of CountryList" [nzLabel]="country['code']" [nzValue]="country['code']" ></nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <div class="col-md-7 pl-0 pt-1">
+                                        <label for="celular">Celular <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="celular" mask="000-000-0000" type="tel" class="form-control" placeholder="PHONE" formControlName="PHONE">
+                                    </div>
+                                    <div class="col-md-9 pl-0 pt-1">
+                                        <label>Celular Email</label>
+                                        <input type="email" class="form-control" placeholder="" value="" formControlName="CELULAREMAIL">
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-3 pl-3">
+                                <h5 class="card-title">Details</h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="license">Driver License Number <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="license" type="text" class="form-control input-fi" placeholder="" formControlName="DIRVERLICENSE">
+                                        <span *ngIf="validarcampos('DIRVERLICENSE')" class="form-text text-danger">License
+                                            Mandatory</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="licenseexpdate">License Exp Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="licenseexpdate" type="date" class="form-control date-inp" value="" formControlName="LICENSEEXPDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="medcardexp">Medical Card Exp Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="medcardexp" type="date" class="form-control date-inp" placeholder="" formControlName="MEDICALCARDEXPDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="annualrev">Annual Review <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="annualrev" type="date" class="form-control date-inp" formControlName="ANUALREVIEW">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="staexpdate">Work Status Exp Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="staexpdate" type="date" class="form-control date-inp" placeholder="" formControlName="WORKSTATUSEXPDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="mvrexpdate">MVR Exp Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="mvrexpdate" type="date" class="form-control date-inp" placeholder="" formControlName="MVREXPDATE">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3 pl-0 pt-4">
+                                <h5 class="card-title "> </h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label for="hiredate">Hire Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="hiredate" type="date" class="form-control date-inp" placeholder="" formControlName="HIREDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="termdate">Termination Date</label>
+                                        <input id="termdate" type="date" class="form-control date-inp" formControlName="TERMINATIONDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="fuelcard">Fuel Card #</label>
+                                        <input id="fuelcard" type="text" class="form-control input-fi" placeholder="" value="" formControlName="PRIMARYFUELCARD">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="bonus">Bonus</label>
+                                        <input id="bonus" type="number" class="form-control input-fi" placeholder="" formControlName="BONUS">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="payrrollaccount">Payroll Account #</label>
+                                        <input id="payrrollaccount" type="text" class="form-control input-fi" placeholder="" formControlName="PAYRALLACCOUNT">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label for="celular">Telephone 2</label>
+                                        <input id="celular" mask="000-000-0000" type="tel" class="form-control address-inp" placeholder="PHONE2" formControlName="PHONE2">
+                                    </div>
+                                    <!-- <div class="pt-2 custom-control custom-checkbox" style="padding-left: 8.5%;">
+                                        <input type="checkbox" class="custom-control-input" id="istruckown">
+                                        <label class="custom-control-label" for="istruckown">Truck Owner</label>
+                                    </div> -->
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-row">
+                            <div>
+                                <div class="form-group ">
+                                    <h5 style="font-size: 95%;" class="pl-2">Dispatcher Type</h5>
+                                    <div class="pl-3 form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="DRIVERTYPE" id="fleetdriver" formControlName="DRIVERTYPE" value="1">
+                                        <label class="pt-1" for="fleetdriver">Fleet Driver</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="DRIVERTYPE" id="OwnerLease" formControlName="DRIVERTYPE" value="2">
+                                        <label class="pt-1" for="OwnerLease">Owner Lease</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="DRIVERTYPE" id="OwnerOperator" formControlName="DRIVERTYPE" value="3">
+                                        <label class="pt-1" for="OwnerOperator">Owner Operator</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <ui5-tabcontainer class="full-width" style="height : 17rem">
+                                <ui5-tab text="Notes" selected>
+                                    <textarea rows="7" nz-input formControlName="NOTES"></textarea>
+                                </ui5-tab>
+                                <ui5-tab text="Attachments ">
+                                    <app-upload-attachments [files]="driverFiles" [objectID]="addForm.get('DRIVERID').value" [type]="4" [service]="ObjServiceService"></app-upload-attachments>
+                                </ui5-tab>
+                            </ui5-tabcontainer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+            
+        </form>
+    </nz-spin>
+
+</div>
+<!--
+<div id="container">
+    <div class="snippet row justify-content-start">
+        <div class="col-4">
+            <ui5-title level="H2" class="text-left">Driver - </ui5-title>
+            <ui5-title level="H5" class="text-left">Status: </ui5-title>
+        </div>
+        <div class="col" style="text-align: right;">
+            <ui5-segmented-button>
+                <ui5-segmented-button-item icon="accept" routerLink="/drivers"></ui5-segmented-button-item>
+                <ui5-segmented-button-item icon="cancel" routerLink="/drivers"></ui5-segmented-button-item>
+            </ui5-segmented-button>
+        </div>
+    </div>
+    <div id="body">
+
+        <div class="snippet row justify-content-start">
+            <div class="col">
+                <ui5-title level="H4" class="text-left">General Information</ui5-title>
+                <div class="text-right">
+                    <div class="col-3" style="text-align: end;">
+                        <ui5-label for="Name" show-colon required>Name</ui5-label>
+                    </div>
+                    <div class="col-4">
+                        <input id="Name" show-clear-icon style="width: 120%;">
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="col-3" style="text-align: end;">
+                        <ui5-label for="Number" style="padding-top: 1%;" required show-colon>Employee Number</ui5-label>
+                    </div>
+                    <div class="col-4">
+                        <input id="Number" show-clear-icon style="width: 120%;">
+                    </div>
+                </div>
+                <div class="text-right">
+                    <div class="col-3" style="text-align: end;">
+                        <ui5-label for="Name" style="padding-top: 1%;" show-colon>Name</ui5-label>
+                    </div>
+                    <div class="col-4">
+                        <input id="Name" show-clear-icon style="width: 120%;">
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+
+            </div>
+        </div>
+        <div class="snippet">
+            <ui5-title level="H4" class="text-left">Address</ui5-title>
+            <div class="text-right">
+                <div class="col">
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Address" show-colon required style="text-align: left;">Address</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="Address" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label for="Name" style="padding-top: 1%;" show-colon>Name</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input id="Name" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="City" show-colon style="text-align: left;">City</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="City" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="ZIPCode" show-colon style="text-align: left;">ZIP Code</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="ZIPCode" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Celular" show-colon style="text-align: left;">Celular Code</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="Celular" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="CelEmail" show-colon style="text-align: left;">Celular Email</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="CelEmail" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Email" show-colon style="text-align: left;">Email</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="Email" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Phone2" show-colon style="text-align: left;">Phone #2</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="Phone2" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="BirthD" show-colon style="text-align: left;">Birth Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="BirthD" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="SocialSecNum" show-colon style="text-align: left;">Social Security #</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="SocialSecNum" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="SDP" show-colon style="text-align: left;">SDP</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="SDP" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="text-right">
+                        <div class="col-4" style="text-align: end;">
+                            <ui5-label class="label" for="LicenseNum" show-colon>Driver License Number</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="LicenseNum" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-4" style="text-align: end;">
+                            <ui5-label class="label" for="LiceExpDate" show-colon style="text-align: left;">License Expires Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="LiceExpDate" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-4" style="text-align: end;">
+                            <ui5-label class="label" for="MedCard" show-colon style="text-align: left;">Medical Card Expires Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="MedCard" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-4" style="text-align: end;">
+                            <ui5-label class="label" for="WorkExpDate" show-colon style="text-align: left;">Work Status Expiration Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="WorkExpDate" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-4" style="text-align: end;">
+                            <ui5-label class="label" for="MVRExDate" show-colon style="text-align: left;">MVR Expiration Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="MVRExDate" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="HireDate" show-colon style="text-align: left;">Hire Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="HireDate" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PrimFuelCard" show-colon style="text-align: left;">Primary Fuel Card</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="PrimFuelCard" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PinNum" show-colon style="text-align: left;">Pin #</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="PinNum" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Bonus" show-colon style="text-align: left;">Bonus</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="Bonus" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="TerminationDate" show-colon style="text-align: left;">Termination Date</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="TerminationDate" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PayrollAcc" show-colon style="text-align: left;">Payroll Account #</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="PayrollAcc" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PaySrc" show-colon style="text-align: left;">Payment Source</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign" id="PaySrc" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="snippet">
+            <div class="text-right">
+                <div class="col-4">
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Dispatch" show-colon style="text-align: left;">Dispatcher</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <ui5-combobox placeholder="Not Selected" id="Dispatch" style="width: 40%;">
+                                <ui5-cb-item text="Item 1"></ui5-cb-item>
+                                <ui5-cb-item text="Item 2"></ui5-cb-item>
+                                <ui5-cb-item text="Item 3"></ui5-cb-item>
+                            </ui5-combobox>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="Extras" show-colon style="text-align: left;padding-top: 1%;">Type</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <div id="Extras" style="display: flex; flex-direction: row;" style="width: 40%;">
+                                <ui5-checkbox id="cb1" text="Fleet Driver"></ui5-checkbox>
+                                <ui5-checkbox id="cb2" text="Owner Lease"></ui5-checkbox>
+                                <ui5-checkbox id="cb3" text="Owner Operator"></ui5-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PaySrc" show-colon style="text-align: left;padding-top: 1%;">Input By</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <input class="rightAlign " id="PaySrc" show-clear-icon style="width: 200%;">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="col-3" style="text-align: end;">
+                            <ui5-label class="label" for="PaySrc" show-colon style="text-align: left;">Transfer Driver</ui5-label>
+                        </div>
+                        <div class="col-4">
+                            <ui5-combobox placeholder="Not Selected" style="width: 40%;">
+                                <ui5-cb-item text="Item 1"></ui5-cb-item>
+                                <ui5-cb-item text="Item 2"></ui5-cb-item>
+                                <ui5-cb-item text="Item 3"></ui5-cb-item>
+                            </ui5-combobox>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="snippet">
+            <ui5-title level="H4" class="text-left">Others</ui5-title>
+            <form>
+                <ui5-tabcontainer class="full-width" style="height : 15rem">
+                    <ui5-tab text="Notes" selected>
+                        <ui5-textarea style="height: 90%; width: 60%"></ui5-textarea>
+                    </ui5-tab>
+                    <ui5-tab text="Attachments ">
+                        <div class="text-right">
+                            <ui5-button icon="add" design="Transparent"></ui5-button>
+                        </div>
+
+                        <ui5-upload-collection id="uploadCollectionDnD">
+
+                            <div class="header " slot="header ">
+                                <ui5-title>Attachments</ui5-title>
+                                <ui5-file-uploader id="fileUploader " hide-input multiple>
+                                </ui5-file-uploader>
+                            </div>
+                        </ui5-upload-collection>
+
+                    </ui5-tab>
+                </ui5-tabcontainer>
+
+                <script>
+                    const createThumbnail = fileName => {
+                        const icon = document.createElement("ui5-icon");
+                        icon.name = "document";
+                        icon.slot = "thumbnail";
+                        return icon;
+                    };
+
+                    const createUCI = file => {
+                        const uci = document.createElement("ui5-upload-collection-item");
+                        description = document.createTextNode("Last modified: " + file.lastModifiedDate + ", size: " + file.size);
+
+                        uci.appendChild(createThumbnail(file.name));
+                        uci.appendChild(description);
+                        uci.file = file;
+                        uci.fileName = file.name;
+                        return uci;
+                    }
+
+                    fileUploader.addEventListener("change", event => {
+                        const files = event.detail.files;
+
+                        for (let i = 0; i < files.length; i++) {
+                            uploadCollection.appendChild(createUCI(files[i]));
+                        }
+                    });
+
+                    startUploading.addEventListener("click", event => {
+                        uploadCollection.items.forEach(item => {
+                            // if there is a file ready to be uploaded send request
+                            if (item.uploadState === "Ready" && item.file) {
+                                const oXHR = new XMLHttpRequest();
+
+                                oXHR.open("POST", "/upload", true);
+                                oXHR.onreadystatechange = function() {
+                                    if (this.status !== 200) {
+                                        item.uploadState = "Error";
+                                    }
+                                };
+                                oXHR.send(item.file);
+                                item.uploadState = "Uploading";
+                            }
+                        });
+                    });
+
+                    uploadCollection.addEventListener("ui5-item-delete", event => {
+                        uploadCollection.removeChild(event.detail.item)
+                    });
+                </script>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+-->
+
+<div>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+</div>

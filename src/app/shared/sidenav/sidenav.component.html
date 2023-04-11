@@ -1,0 +1,62 @@
+<ui5-side-navigation id="side-navigation">
+    <ui5-side-navigation-item text="Home" icon="home" routerLink="/home" (click)="colapsar()" ></ui5-side-navigation-item >
+    <ui5-side-navigation-item text="Trip" expanded icon="shipping-status" routerLink="/trips" *ngxPermissionsOnly="['ADMIN', 'DISPATCHER']" (click)="colapsar()">
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="Master Data" icon="supplier"  *ngxPermissionsOnly="['ADMIN', 'DISPATCHER']">
+        <ui5-side-navigation-sub-item text="Carrier" routerLink="/carriers" (click)="colapsar()" *ngxPermissionsOnly="['ADMIN', 'DISPATCHER']" >
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Driver" routerLink="/drivers" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Truck Owner" routerLink="/truckowners" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="Vehicles" icon="bus-public-transport" *ngxPermissionsOnly="['ADMIN']">
+        <ui5-side-navigation-sub-item text="Truck" routerLink="/trucks" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Trailer" routerLink="/trailers" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="Logistic Data" icon="crm-sales" *ngxPermissionsOnly="['ADMIN', 'DISPATCHER']">
+        <ui5-side-navigation-sub-item text="Customer" routerLink="/customers" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Shipper" routerLink="/shippers" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Consignee" routerLink="/consignees" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="Configuration Data" icon="action-settings" *ngxPermissionsOnly="['ADMIN']">
+        <ui5-side-navigation-sub-item text="Equipment Type" routerLink="/equipmenttypes" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Commodity" routerLink="/commodity" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="User Management" icon="user-settings" *ngxPermissionsOnly="['ADMIN']">
+        <ui5-side-navigation-sub-item text="Users" routerLink="/users" (click)="colapsar()"></ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Roles" routerLink="/roles" (click)="colapsar()"></ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Uploader" routerLink="/uploader" (click)="colapsar()"></ui5-side-navigation-sub-item>
+        <!-- <ui5-side-navigation-sub-item text="Views" routerLink="/views"></ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Views per Role" routerLink="/roleviews"></ui5-side-navigation-sub-item> -->
+
+    </ui5-side-navigation-item>
+    <ui5-side-navigation-item text="Settings" icon="action-settings" *ngxPermissionsOnly="['ADMIN']">
+        <!-- <ui5-side-navigation-sub-item text="Driver Type" routerLink="/drivertype" (click)="colapsar()">
+        </ui5-side-navigation-sub-item> -->
+        <ui5-side-navigation-sub-item text="Insurance Company" routerLink="/insuranceCompany" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Factoring Company" routerLink="/factoringcompany" (click)="colapsar()" ></ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Trailer Type" routerLink="/trailertype" (click)="colapsar()">           
+        </ui5-side-navigation-sub-item>        
+        <!-- <ui5-side-navigation-sub-item text="Transport Type" routerLink="/transporttype" (click)="colapsar()" ></ui5-side-navigation-sub-item> -->
+        <ui5-side-navigation-sub-item text="Roof Type" routerLink="/rooftype" (click)="colapsar()" ></ui5-side-navigation-sub-item>
+        <ui5-side-navigation-sub-item text="Paybasis" routerLink="/paybasis" (click)="colapsar()">
+        </ui5-side-navigation-sub-item>        
+        <!-- <ui5-side-navigation-sub-item text="Payment Type" routerLink="/paymenttype" (click)="colapsar()" ></ui5-side-navigation-sub-item> -->
+        <!-- <ui5-side-navigation-sub-item text="Scrow Type" routerLink="/scrowtype" (click)="colapsar()" ></ui5-side-navigation-sub-item> -->
+        
+    </ui5-side-navigation-item>
+
+
+    <ui5-side-navigation-item slot="fixedItems" text="Log Out" icon="log" (click)="logout()">
+    </ui5-side-navigation-item>
+
+</ui5-side-navigation>

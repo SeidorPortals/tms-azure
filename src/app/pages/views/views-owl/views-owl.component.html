@@ -1,0 +1,83 @@
+<div class="wrapper">
+    <!-- Header -->
+
+    <ui5-bar design="Header">
+        <h3 class="card-title" slot="startContent">Views </h3>
+
+    </ui5-bar>
+    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+        <ui5-input id="searchInput" slot="endContent" placeholder="Search by View..." style="width: 75%">
+            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+        </ui5-input>
+        <ui5-button icon="add" design="Transparent" tooltip="Create New Trip" slot="endContent" routerLink="/new-view/.!">
+            New</ui5-button>
+
+    </ui5-bar>
+    <div class="body">
+        <ui5-table class="demo-table" no-data-text="No Data" id="table">
+            <!-- Columns -->
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Name</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Description</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Path</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Icon</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Title</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">View Subtitle</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Status</span>
+            </ui5-table-column>
+
+           
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Actions</span>
+            </ui5-table-column>
+
+            <ui5-table-row *ngFor="let lineIt of ObjList; let i = index" class="ui-table-row-root">
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_ID}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_NAME}}</span>
+                </ui5-table-cell>
+
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_STATUS}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_DESCRIPTION}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_ROUTE}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_TEXT}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{lineIt.VIEW_DESCR}}</span>
+                </ui5-table-cell>
+                
+                <ui5-button icon="edit" design="Transparent"
+                        [routerLink]="['/new-view', lineIt.VIEW_ID]">
+                    </ui5-button>
+            </ui5-table-row>
+        </ui5-table>
+    </div>
+</div>

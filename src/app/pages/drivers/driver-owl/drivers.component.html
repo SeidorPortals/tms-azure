@@ -1,0 +1,102 @@
+<div class="wrapper">
+    <!-- Header -->
+
+    <ui5-bar design="Header">
+        <h3 class="card-title" slot="startContent">Drivers </h3>
+
+    </ui5-bar>
+    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+        <ui5-input id="searchInput" slot="endContent" placeholder="Search by Driver..." style="width: 75%">
+            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+        </ui5-input>
+        <ui5-button icon="add" design="Transparent" tooltip="Create New Trip" slot="endContent" routerLink="/new-driver/.!">New</ui5-button>
+
+    </ui5-bar>
+    <div class="body">
+        <ui5-table mode="SingleSelect" no-data-text="No Data" class="demo-table" id="table">
+            <!-- Columns -->
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Name</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Number</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Payee Name</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Address</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">City</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">ZIP Code</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Celular #</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Celular Email</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Phone #2</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Birth Date</span>
+            </ui5-table-column>
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Actions</span>
+            </ui5-table-column>
+
+            <ui5-table-row *ngFor="let driver of ObjList; let i = index" class="ui-table-row-root">
+                <ui5-table-cell slot="default">
+                    <span>{{driver.NAME}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.DRIVERID}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.PAYEENAME}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.ADRESS}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.CITY}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.ZIPCODE}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.PHONE}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.CELULAREMAIL}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.PHONE2}}</span>
+                </ui5-table-cell>
+                <ui5-table-cell slot="default">
+                    <span>{{driver.BIRTHDATE}}</span>
+                </ui5-table-cell>
+                <ui5-button icon="edit" design="Transparent" [routerLink]="['/new-driver', driver.DRIVERID]">
+                </ui5-button>
+
+                <!-- <ui5-button icon="delete" design="Transparent" (click)="deleteObj(driver.DRIVERID)">
+              </ui5-button> -->
+            </ui5-table-row>
+        </ui5-table>
+    </div>
+</div>

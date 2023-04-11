@@ -1,0 +1,208 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+    <nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+        <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+            <div class="col-lg">
+                <div class="card card-user">
+                    <div class="card-header">
+                        <ui5-bar design="Trailer">
+                            <h3 class="card-title" slot="startContent">Trailer </h3>
+                            <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" [isValidForm]="statusValid"
+                                (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                            </app-btn-status>
+                            <ui5-button icon="complete" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                            </ui5-button>
+                            <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addForm.invalid">Save
+                            </ui5-button>
+                            <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/trailers">Cancel
+                            </ui5-button>
+                        </ui5-bar>
+                        <h6 class="pl-3 card-title">Status: {{vs.getStatusByCode(numberStatus)}}</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md-4 ">
+                                <h5 class="card-title">General Information</h5>
+                                <div class="form-group col-md-9">
+                                    <div class="pl-2">
+                                        <label class="label" for="TRAILERNUMBER"> Number <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="TRAILERNUMBER" type="name" class="form-control" placeholder="  Number" formControlName="TRAILERNUMBER" name="TRAILERNUMBER" required>
+                                        <span *ngIf="validarcampos('TRAILERNUMBER')" class="form-text text-danger">Number
+                                            Mandatory</span>
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="Type">Type <label class="text-danger font-weight-bolder">*</label></label>
+                                        <!-- <input class="form-control" id="Type" type="number" formControlName="TRAILERTYPE" /> -->
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                    fieldsOVS[0].id !=
+                                                    '' ? fieldsOVS[0].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" class="form-control input-fi" (focus)="onChange($event, 0)" (input)="onChange($event, 0)" (blur)="sinEscribir($event, 0)" [nzAutocomplete]="trailertypes" placeholder="Trailer Type" aria-describedby="button-addon2" [(ngModel)]="fieldsOVS[0].name"
+                                                [ngModelOptions]="{ standalone: true }" />
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button (click)="listSelected(0)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                    <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #trailertypes>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 0)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                        </div>
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="Make">
+                                            Make</label>
+                                        <input class="form-control" id="Make" type="text" formControlName="MAKE" />
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="Owner">
+                                            Owner</label>
+                                        <input class="form-control" id="Owner" type="text" formControlName="OWNER" />
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="Year">
+                                            Year</label>
+                                        <!-- <input class="form-control" id="Year" type="number" formControlName="TYEAR" /> -->
+                                        <nz-select  class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="TYEAR">
+                                            <nz-option  *ngFor="let data of vs.YearsData" [nzLabel]="data['code']" [nzValue]="data['code']" ></nz-option>
+                                          </nz-select>
+                                        <!-- <select class="custom-select input-fi" type="number" id="Year" formControlName="TYEAR">
+                                            <option value=2010>2000</option>
+                                            <option value=2011>2001</option>
+                                            <option value=2012>2002</option>
+                                            <option value=2013>2003</option>
+                                            <option value=2014>2004</option>
+                                            <option value=2015>2005</option>
+                                            <option value=2016>2006</option>
+                                            <option value=2017>2007</option>
+                                            <option value=2018>2008</option>
+                                            <option value=2019>2009</option>
+                                            <option value=2010>2010</option>
+                                            <option value=2011>2011</option>
+                                            <option value=2012>2012</option>
+                                            <option value=2013>2013</option>
+                                            <option value=2014>2014</option>
+                                            <option value=2015>2015</option>
+                                            <option value=2016>2016</option>
+                                            <option value=2017>2017</option>
+                                            <option value=2018>2018</option>
+                                            <option value=2019>2019</option>
+                                            <option value=2020>2020</option>
+                                            <option value=2021>2021</option>
+                                            <option value=2022>2022</option>
+                                            <option value=2023>2023</option>
+                                        </select> -->
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="License">
+                                            License Plate <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input class="form-control" id="License" type="text" formControlName="LICENSEPLATE" />
+                                    </div>
+                                    <div class="pl-2">
+                                        <label class="label" for="LicenseDate">
+                                            License Exp. Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input class="form-control" id="LicenseDate" type="date" formControlName="LICENSEEXPDATE" />
+                                        <span *ngIf="validarcampos('LICENSEEXPDATE')" class="form-text text-danger">Date
+                                            Mandatory</span>
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class="col-md-3">
+                                <h5 class="card-title"> </h5>
+                                <div class="form-group pt-4">
+                                    <div class="pl-2">
+                                        <label class="label" for="AnInsp">
+                                            Annual Inspection <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input class="form-control" id="AnInsp" type="date" formControlName="ANNUALINSPECTION" />
+                                    </div>
+    
+                                    <div class="pl-2">
+                                        <label class="label" for="RoofType">Roof Type *
+                                        </label>
+                                        <!-- <input class="form-control" type="number" id="RoofType" formControlName="ROOFTYPE" /> -->
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                    fieldsOVS[1].id !=
+                                                    '' ? fieldsOVS[1].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" class="form-control input-fi" (focus)="onChange($event, 1)" (input)="onChange($event, 1)" (blur)="sinEscribir($event, 1)" [nzAutocomplete]="rooftypes" placeholder="Roof Type" aria-describedby="button-addon2" [(ngModel)]="fieldsOVS[1].name"
+                                                [ngModelOptions]="{ standalone: true }" />
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button (click)="listSelected(1)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                    <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #rooftypes>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 1)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                        </div>
+                                    </div>
+                                    <div class="pb-1 pl-2 col-6">
+                                        <label for="Weight">Weight</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control input-fi" min="0" step="0.1" formControlName="WEIGHT" placeholder="Weight">
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30%">
+                                                <select formControlName="UNITCODE" style="margin: 0px; padding: 0px 0px 0px 6px; height: 100%; background-color: #f8f8f8;" class="btn-input-group">
+                                                <option value="LB">LB</option>
+                                                <option value="KG">KG</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="pl-2 pt-4">
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="PhysDam">
+                                            <label class="form-check-label" for="PhysDam">Physical Damage</label>
+                                        </div>
+                                    </div>
+                                    <div class="pl-2 pt-4">
+                                        <h5 class="card-title">Extras</h5>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="VENTILATION" formControlName="VENTILATION">
+                                            <label class="form-check-label" for="VENTILATION">Ventilation</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="AIR">
+                                            <label class="form-check-label" for="AIR">Air</label>
+                                        </div>
+                                        <div class="form-check-inline">
+                                            <input class="form-check-input" type="checkbox" id="WHEELREPOSITION">
+                                            <label class="form-check-label" for="WHEELREPOSITION">Wheel Reposition</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <h5 class="card-title">Others</h5>
+                            <ui5-tabcontainer class="full-width" style="height : 17rem">
+                                <ui5-tab text="Notes" selected>
+                                    <textarea rows="7" nz-input formControlName="NOTES"></textarea>
+                                </ui5-tab>
+                                <ui5-tab text="Attachments ">
+                                    <app-upload-attachments [files]="trailerFiles" [objectID]="addForm.get('TRAILERNUMBER').value" [type]="2" [service]="ObjServiceService" ></app-upload-attachments>
+                                </ui5-tab>
+                            </ui5-tabcontainer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nz-spin>
+    
+</div>
+<app-modal-dropdown [ovsSelected]="fieldOVSSelected" [watchOVS]="watchOVS" [columns]="columnsSelected" [list]="listMSelected" [fieldSearch]="valueField" (actionClose)="closeModalDropdown($event)" (actionUpdateInfo)="listSelected($event, true)" (fieldSelected)="changeField($event)">
+</app-modal-dropdown>

@@ -1,0 +1,319 @@
+<nz-spin [nzSpinning]="isSpinning" [nzSize]="'large'" [nzTip]="'Loading...'">
+    <div class="row" style="height:95%;">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+
+        <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+
+            <div class="col-md">
+                <div class="card card-user">
+                    <div class="card-header">
+                        <ui5-bar design="Driver">
+                            <h3 class="card-title" slot="startContent">Carrier: </h3>
+                            <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" [isValidForm]="statusValid" slot="endContent">
+                            </app-btn-status>
+                            <ui5-button icon="complete" tooltip="Save and Close" slot="endContent" (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                            </ui5-button>
+                            <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true" [disabled]="addForm.invalid">Save
+                            </ui5-button>
+                            <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/carriers">Cancel
+                            </ui5-button>
+                            <!-- <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" (click)="sendSupplier()">SAP</ui5-button> -->
+                        </ui5-bar>
+                        <h6 class="card-title">Status: {{vs.getStatusByCode(numberStatus)}} </h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-row">
+                            <div class="col-md">
+                                <h5 class="card-title">General Information</h5>
+                                <div class="form-group">
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="myInput" required>MC <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input class="form-control input-fi" [readonly]="saved" id="myInput" show-clear-icon formControlName="MC" name="mc" oninput="this.value = this.value.trim()" />
+                                        <span *ngIf="validarcampos('MC')" class="form-text text-danger">MC Mandatory</span>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="Name" required>Name <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input class="form-control input-fi" id="Name" formControlName="NAME" name="name" />
+                                        <span *ngIf="validarcampos('NAME')" class="form-text text-danger">Name Mandatory</span>
+                                    </div>
+
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="TaxID">Tax ID</label>
+                                        <input class="form-control input-fi" id="TaxID" formControlName="TAXID" name="taxid" />
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="solutionID">DOT</label>
+                                        <input class="form-control input-fi" class="form-control input-fi" id="solutionID" formControlName="DOT" name="dot">
+                                    </div>
+
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="LDOT">Last DOT Rating Update</label>
+                                        <input id="LDOT" type="Date" class="form-control date-inp" style="width: 60%;" formControlName="LASTDOTUPDATE">
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="INSDate" required>Insurance Exp. Date <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input id="INSDate" type="Date" class="form-control date-inp" style="width: 60%;" formControlName="INSURANCEEXPDATE">
+                                        <span *ngIf="validarcampos('INSURANCEEXPDATE')" class="form-text text-danger">Date Mandatory</span>
+                                        <span *ngIf="!validarfecha('INSURANCEEXPDATE')" class="form-text text-danger">Date Out Of Range</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <h5 class="card-title"> </h5>
+                                <div class="form-group pt-4">
+                                    <div class="pb-1 pl-2 col-md-11">
+                                        <label class="label" for="FactComp">Factoring Company <label class="text-danger font-weight-bolder">*</label></label>
+                                        <!-- <input class="form-control input-fi" type="number" id="FactComp" formControlName="FACTORINGCOMPANYID">  -->
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                    fieldsOVS[1].id !='' ? fieldsOVS[1].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" class="form-read form-control input-fi" (focus)="onChange($event, 1)" (input)="onChange($event, 1)" (blur)="sinEscribir($event, 1)" [nzAutocomplete]="factoringcompanys" placeholder="Factoring Company" aria-describedby="button-addon2"
+                                                [(ngModel)]="fieldsOVS[1].name" [ngModelOptions]="{ standalone: true }" />
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button (click)="listSelected(1)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                    <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #factoringcompanys>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 1)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                            <span *ngIf="validarcampos('FACTORINGCOMPANYID')" class="form-text text-danger">Factoring Company Mandatory</span>
+                                        </div>
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="FactMail">Factoring Email</label>
+                                        <input type="email" class="form-control input-fi" id="FactMail" placeholder="mail@mail.com" formControlName="FACTORINGEMAIL">
+                                    </div>
+
+
+                                    <div class="pb-1 pl-2 col-md-11">
+                                        <label for="EqType">Equipment Type <label class="text-danger font-weight-bolder">*</label></label>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend" style="margin: 0px; padding: 0px;  border-right:  1px solid #ced4da;">
+                                                <span class="text-input-group" style="padding: 0px 3px 0px 3px;"> {{
+                                                    fieldsOVS[0].id !=
+                                                    '' ? fieldsOVS[0].id : '-' }}</span>
+                                            </div>
+                                            <input type="text" class="form-read form-control input-fi" (focus)="onChange($event, 0)" (input)="onChange($event, 0)" (blur)="sinEscribir($event, 0)" [nzAutocomplete]="equipmenttypes" placeholder="Equipment Type" aria-describedby="button-addon2" [(ngModel)]="fieldsOVS[0].name"
+                                                [ngModelOptions]="{ standalone: true }" />
+                                            <div class="input-group-append" style="margin: 0px; padding: 0px; width: 30px;">
+                                                <button (click)="listSelected(0)" style="margin: 0px; padding: 0px; width: 30px; " class="form-btn btn-input-group" type="button" id="button-addon2">
+                                                    <ui5-icon class="btn-input-icon" name="value-help"></ui5-icon>
+                                                </button>
+                                            </div>
+                                            <nz-autocomplete #equipmenttypes>
+                                                <ng-container *ngIf="listSuggestionsM != null && listSuggestionsM.length > 0">
+                                                    <nz-auto-option *ngFor="let option of listSuggestionsM" [attr.data-id]="getOption(option,'ID')" [attr.data-name]="getOption(option,'NAME')" [nzValue]="getOption(option, 'NAME')" (selectionChange)="suggestionSelected($event, 0)">
+                                                        {{ getOption(option,'OPTION') }}
+                                                    </nz-auto-option>
+                                                </ng-container>
+                                            </nz-autocomplete>
+                                            <span *ngIf="validarcampos('EQUIPMENTTYPEID')" class="form-text text-danger">MC Mandatory</span>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="QPDisc">QuickPay Discount</label>
+                                        <input class="form-control input-fi" type="number" id="QPDisc" formControlName="QUICKPAYDISCOUNT" />
+                                    </div>
+                                    <div class="pb-1 pl-2">
+                                        <label class="label" for="EMail">EMail</label>
+                                        <input class="form-control input-fi" id="EMail" placeholder="mail@mail.com" formControlName="LPMEMAIL" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <h5 class="card-title">Address</h5>
+                                <div class="form-group">
+
+                                    <div class="form-row pb-1">
+                                        <div class="col-md-4">
+                                            <label>House Number <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control address-inp" placeholder="House Number" value="" formControlName="HOUSENUMBER">
+                                        </div>
+                                        <div class="col-md-7">
+                                            <label>Street <label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control address-inp" placeholder="Street" value="" formControlName="STREET">
+                                        </div>
+                                    </div>
+                                    <div class="pl-0 pb-1">
+                                        <label>Address Line 1</label>
+                                        <input type="text" class="form-control address-inp" style="width: 90%;" placeholder="Address" value="" formControlName="ADRESS">
+                                    </div>
+                                    <div class="form-row pb-1">
+
+                                        <div class="col-md-5">
+                                            <label>City<label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control address-inp" placeholder=" City" value="" formControlName="CITY">
+                                        </div>
+                                        <div class="col-sm-3 ">
+                                            <label>State <label class="text-danger font-weight-bolder">*</label></label>
+                                            <!-- <input type="text" class="form-control address-inp" placeholder=" State" value="" formControlName="STATE"> -->
+                                            <!-- <select type="text" class="custom-select" placeholder="Select Customer" formControlName="STATE">
+                                                <option *ngFor="let region of RegionList" [value]="region.name">
+                                                    ({{region.name}})</option>
+                                            </select> -->
+                                            <nz-select class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="STATE">
+                                                <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']" [nzValue]="states['code']"></nz-option>
+                                            </nz-select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label>Zip<label class="text-danger font-weight-bolder">*</label></label>
+                                            <input type="text" class="form-control address-inp" style="width: 90%;" placeholder="" value="" formControlName="ZIPCODE">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 pl-0">
+                                        <label>Country<label class="text-danger font-weight-bolder">*</label></label>
+                                        <!-- <input  type="text" class="form-control address-inp" placeholder="Country" formControlName="COUNTRY"> -->
+                                        <!-- <select type="text" class="custom-select" placeholder="Country" formControlName="COUNTRY">
+                                            <option *ngFor="let country of CountryList" [value]="country.name">
+                                                ({{country.name}})</option>
+                                        </select> -->
+                                        <nz-select class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}" nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..." nzSize="large" formControlName="COUNTRY">
+                                            <nz-option *ngFor="let country of CountryList" [nzLabel]="country['code']" [nzValue]="country['code']"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <div class="pt-1">
+                                        <label class="label" for="Tel">Tel</label>
+                                        <input class="form-control input-fi" id="Tel" style="width: 60%" formControlName="PHONE" />
+                                    </div>
+                                    <div class="pb-1">
+                                        <label class="label" for="Contact">Contact</label>
+                                        <input class="form-control input-fi" id="Contact" style="width: 60%" formControlName="CONTACT" />
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <h5 class="card-title">Units</h5>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <!-- <label>Number Of Vans</label>
+                                            <input type="text" class="form-control" name="solutionID" > -->
+                                            <label class="label" for="VansNum">Number Of Vans</label>
+                                            <input class="form-control input-fi" id="VansNum" type="number" style="width: 40%" formControlName="VANSNUMB" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <!-- <label>Number Of Refers</label>
+                                        <input type="text" class="form-control" name="solutionID" > -->
+                                            <label class="label" for="RefersNum">Number Of Refers</label>
+                                            <input class="form-control input-fi" id="RefersNum" type="number" style="width: 40%" formControlName="REEFERSNUMB" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <!-- <label>Number Of Flatbeds</label>
+                                        <  input type="text" class="form-control" name="solutionID" > -->
+                                            <label class="label" for="FlatbedsNum">Number Of Flatbeds</label>
+                                            <input class="form-control input-fi" id="FlatbedsNum" type="number" style="width: 40%" formControlName="FLATBEDS" />
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <!-- <label>Number Of Step Decks</label>
+                                        <input type="text" class="form-control" name="solutionID" > -->
+                                            <label class="label" for="StepDeckNum">Number Of Step Decks</label>
+                                            <input class="form-control input-fi" id="StepDeckNum" type="number" style="width: 40%" formControlName="STEPDECKS" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h5 class="card-title">Required Files</h5>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <ui5-file-uploader hide-input (change)="onChangeFile($event)" id="attPackage">
+                                                <ui5-button>Package</ui5-button>
+                                            </ui5-file-uploader>
+                                            <ui5-badge color-scheme="8" [hidden]="AttPKoculto">
+                                                <ui5-icon name="accept" slot="icon"></ui5-icon>done
+                                            </ui5-badge>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <ui5-file-uploader hide-input (change)="onChangeFile($event)" id="attMCDOT">
+                                                <ui5-button>MC/DOT Letter</ui5-button>
+                                            </ui5-file-uploader>
+                                            <ui5-badge color-scheme="8" [hidden]="AttMCDOToculto">
+                                                <ui5-icon name="accept" slot="icon"></ui5-icon>done
+                                            </ui5-badge>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <ui5-file-uploader hide-input (change)="onChangeFile($event)" id="attCOI">
+                                                <ui5-button>COI Insurance</ui5-button>
+                                            </ui5-file-uploader>
+                                            <ui5-badge color-scheme="8" [hidden]="AttCOIoculto">
+                                                <ui5-icon name="accept" slot="icon"></ui5-icon>done
+                                            </ui5-badge>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="pb-1 pl-2">
+                                            <ui5-file-uploader hide-input (change)="onChangeFile($event)" id="attW9">
+                                                <ui5-button>W9</ui5-button>
+                                            </ui5-file-uploader>
+                                            <ui5-badge color-scheme="8" [hidden]="AttW9oculto">
+                                                <ui5-icon name="accept" slot="icon"></ui5-icon>done
+                                            </ui5-badge>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="form-group text-center">
+                            <button type="submit" class="btn btn-primary w-25">
+                                <i class="fa fa-save"></i>
+                                Save
+                            </button>
+                            <div class="text-left">Required Fields (*) </div>
+                        </div> -->
+                        <div class="form-row">
+                            <ui5-title level="H3">Others</ui5-title>
+
+                            <ui5-tabcontainer class="full-width" style="height : 17rem">
+                                <ui5-tab text="Notes" selected>
+                                    <textarea rows="7" nz-input formControlName="NOTES"></textarea>
+                                    <!-- <textarea style="height: 85%; width: 60%" formControlName="NOTES"></textarea> -->
+                                </ui5-tab>
+                                <ui5-tab text="Attachments ">
+                                    <app-upload-attachments [files]="carrierFiles" [objectID]="addForm.get('MC').value" [type]="5" [service]="ObjServiceService"></app-upload-attachments>
+                                </ui5-tab>
+                            </ui5-tabcontainer>
+
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+            </div>
+        </form>
+
+    </div>
+    <app-modal-dropdown [ovsSelected]="fieldOVSSelected" [watchOVS]="watchOVS" [columns]="columnsSelected" [list]="listMSelected" [fieldSearch]="valueField" (actionClose)="closeModalDropdown($event)" (actionUpdateInfo)="listSelected($event, true)" (fieldSelected)="changeField($event)">
+    </app-modal-dropdown>
+</nz-spin>

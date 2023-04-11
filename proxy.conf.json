@@ -1,0 +1,9 @@
+{
+    "/api/*": {
+        "target": "https://nodequerydis.cfapps.us10.hana.ondemand.com",
+        "secure": false,
+        "loglevel": "debug",
+        "changeOrigin": "true"
+    }
+}
+

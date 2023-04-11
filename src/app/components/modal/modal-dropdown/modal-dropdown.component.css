@@ -1,0 +1,28 @@
+.btn-input-group {
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    background-color: #ffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-group:hover{
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-icon:hover{
+    color: #0854a0;
+}
+
+

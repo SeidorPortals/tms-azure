@@ -1,0 +1,54 @@
+<body class="text-center">
+
+    <main class="w-50 m-auto">
+        <br>
+        <br>
+
+
+        <div class="card">
+            <form [formGroup]="addForm" #f="ngForm" autocomplete="off" class="form-signin w-auto m-auto mb-3">
+
+                <img class="mb-3" src="../../../../assets/img/usaTruck.png" alt="" width="400" height="100">
+                <h1 class="h3 mb-3 fw-normal">Please Login</h1>
+
+                <div class="form-floating" [formGroup]="addForm">
+                    <input id="user" type="text" class="form-control" placeholder=" USER" formControlName="USER_ID" oninput="this.value = this.value.toUpperCase()">
+                    <label for="user">User</label>
+                    <span *ngIf="validarcampos('USER_ID', addForm)" class="text-danger">Please set a
+                        User.</span>
+                </div>
+                <br>
+                <div class="form-floating" [formGroup]="addForm">
+                    <input id="password" type="password" class="form-control" placeholder=" Password" formControlName="PASSWORD">
+                    <label for="password">Password</label>
+                    <span *ngIf="validarcampos('PASSWORD', addForm)" class="text-danger">Please set a
+                        Password.</span>
+                </div>
+                <ui5-link routerLink="/recovermail" design="Subtle">Forgot password?</ui5-link>
+                <br>
+                <!-- <div class="checkbox mb-3">
+                    <label>
+                        <input type="checkbox" value="remember-me"> Remember me
+                    </label>
+                </div> -->
+                <button class="w-100 btn btn-lg btn-primary" (click)="loginAuth(false)">Sign in</button>
+
+
+                <p class="mt-5 mb-3 text-muted">&copy; Dispatchers App 2022</p>
+
+                <div class="form-group text-center">
+
+                    <div class="text-left">Required Fields (*) </div>
+                </div>
+
+
+
+            </form>
+        </div>
+
+
+
+    </main>
+
+
+</body>

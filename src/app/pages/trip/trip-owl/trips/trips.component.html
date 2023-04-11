@@ -1,0 +1,123 @@
+<!-- Header -->
+
+<!-- <div class="card-header">
+    <ui5-bar design="Driver">
+        <h3 class="card-title" slot="startContent">Driver: </h3>
+        <ui5-button icon="edit" tooltip="Go to settings" slot="endContent">Save</ui5-button>
+        <ui5-button icon="add" tooltip="Go to settings" slot="endContent">Cancel</ui5-button>
+
+    </ui5-bar>
+    <h6 class="card-title">Status: </h6>
+</div> -->
+<ui5-bar design="Header">
+
+    <h3 class="card-title" slot="startContent">Trips </h3>
+</ui5-bar>
+<ui5-bar design="Header" style="background-color: #f7f7f7;">
+    <ui5-input id="searchInput" slot="endContent" placeholder="Search by Trips..." style="width: 75%">
+        <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+    </ui5-input>
+    <ui5-button icon="add" design="Transparent" tooltip="Create New Trip" slot="endContent" routerLink="/new-trip/.!">New</ui5-button>
+
+</ui5-bar>
+
+
+
+<!-- <ui5-title level="H2">Trips</ui5-title>
+<br>
+
+<ui5-input id="searchInput" placeholder="Search by Trips..." style="width: 25%">
+    <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+</ui5-input> -->
+
+<!-- Header -->
+<div class="body">
+    <ui5-table #table class="demo-table center-table" [stickyColumnHeader]="true" no-data-text="No Data" >
+        <!-- Columns -->
+        <ng-container>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem"> ID </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Company </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Carrier </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Customer </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Shipper </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Customer PO# </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Sales Man </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Delivery </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem">Cost </span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" >
+                <span style="line-height: 1.4rem"> Actions </span>
+            </ui5-table-column>
+        </ng-container>
+
+        <ui5-table-row *ngFor="let item of ObjList"  class="ui-table-row-root">
+            <ui5-table-cell>
+                <span> {{  item.TRIPID }}  </span>
+                <span>    </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.COMPANY_NAME }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.CARRIER_NAME }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.SHIPPER_NAME }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.CUSTOMERPO }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.SHIPPER_NAME }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span>  {{  item.AGENT }} </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.DELIVERYDATE | date: 'MM/dd/yyyy HH:mm' }}  </span>
+            </ui5-table-cell>
+            <ui5-table-cell>
+                <span> {{  item.COST | number: '1.2' }}  </span>
+            </ui5-table-cell>
+            <ui5-button icon="edit" design="Transparent" [routerLink]="['./../new-trip', item['TRIPID']]">
+            </ui5-button>
+            
+
+            <!-- <ng-container *ngFor="let column of columns">
+                <ui5-table-cell *ngIf="column.watch == null">
+                    <ng-container *ngIf="column.key != null && column.key.length > 0; else sinKey">
+                        <span *ngIf="column.type === 'TEXT' || column.type === 'DATE'"> {{  item[column.key] }}  </span>
+                        <span  *ngIf="column.type === 'NUMBER'">  {{  item[column.key] | number: '1.2' }}  </span>
+                    </ng-container>
+                    <ng-template #sinKey>
+                        <div *ngIf="column.title === 'Actions'">
+                            <ui5-button icon="edit" design="Transparent" [routerLink]="['./../new-trip', item['TRIPID']]">
+                            </ui5-button>
+                             <ui5-button icon="delete" style="margin-left: 5%;" [disabled]="item['STATUSID'] === 2" (click)="confirmDelete(item['TRIPID'])">
+                            </ui5-button>
+                        </div>
+                        <span></span>
+                    </ng-template>
+                </ui5-table-cell>
+            </ng-container> -->
+        </ui5-table-row>
+
+    </ui5-table>
+</div>

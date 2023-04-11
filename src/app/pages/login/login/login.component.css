@@ -1,0 +1,29 @@
+html,
+
+
+body {
+  display: flex;
+  align-items: center;
+  padding-top: 50px;
+  padding-bottom: 25%;
+  background-color: #F7F7F7;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+}
+
+
+
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

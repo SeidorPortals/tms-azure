@@ -1,0 +1,102 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <form [formGroup]="addForm" (ngSubmit)="actionsave(addForm,false)" autocomplete="off">
+        <div class="col-lg">
+            <div class="card card-user">
+                <div class="card-header">
+                    <ui5-bar design="Driver">
+                        <h3 class="card-title" slot="startContent">User: </h3>
+                        <ui5-button icon="complete" tooltip="Save and Close" slot="endContent"
+                            (click)="actionsave(addForm,true)" [disabled]="addForm.invalid">Save and Close
+                        </ui5-button>
+                        <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true"
+                            [disabled]="addForm.invalid">Save
+                        </ui5-button>
+                        <ui5-button icon="cancel" tooltip="Cancel" slot="endContent" routerLink="/views">Cancel
+                        </ui5-button>
+                    </ui5-bar>
+                    <h6 class="card-title pl-4 pt-4">Status: </h6>
+                </div>
+                <div class="card-body" style="padding-left: 2%;">
+                    <div class="form-row">
+                        <div class="col-md-2">
+                            <h5 class="card-title">General Information</h5>
+                            <div class="form-group">
+                                <div class="pb-1 pl-2">
+                                    <label for="UserID">View ID</label>
+                                    <input id="UserID" type="name" class="input-fi form-control"
+                                        placeholder="" id="VIEW_ID" formControlName="VIEW_ID" >
+                                    <span *ngIf="validarcampos('VIEW_ID')" class="form-text text-danger">View ID
+                                        Mandatory</span>
+                                </div>
+                                <div class="pb-1 pl-2">
+                                    <label for="Name">View Name</label>
+                                    <input type="text" class="form-control input-fi" id="Name" formControlName="VIEW_NAME"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_NAME')" class="form-text text-danger">Please set a view name</span>
+                                </div>
+                                <div class="pb-1 pl-2">
+                                    <label for="Email">View Description</label>
+                                    <input type="text" class="form-control input-fi" id="Email" formControlName="VIEW_DESCRIPTION"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_DESCRIPTION')" class="form-text text-danger">Please set a view description</span>
+                                </div>
+                                <div class="pb-1 pl-2">
+                                    <label for="Name">View Icon</label>
+                                    <input type="text" class="form-control input-fi" id="Name" formControlName="VIEW_ICON"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_ICON')" class="form-text text-danger">Please set a view icon</span>
+                                </div>
+                                <div class="pb-1 pl-2">
+                                    <label for="Name">View Route</label>
+                                    <input type="text" class="form-control input-fi" id="Name" formControlName="VIEW_ROUTE"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_ROUTE')" class="form-text text-danger">Please set a view route</span>
+                                </div>
+
+                                <div class="pb-1 pl-2">
+                                    <label for="Name">View Title</label>
+                                    <input type="text" class="form-control input-fi" id="Name" formControlName="VIEW_TEXT"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_TEXT')" class="form-text text-danger">Please set a view title</span>
+                                </div>
+
+                                <div class="pb-1 pl-2">
+                                    <label for="Name">View Subtitle</label>
+                                    <input type="text" class="form-control input-fi" id="Name" formControlName="VIEW_DESCR"
+                                        placeholder="">
+                                    <span *ngIf="validarcampos('VIEW_DESCR')" class="form-text text-danger">Please set a view subtitle</span>
+                                </div>
+                                                           
+
+                            </div>
+                        </div>
+
+                       
+                        <div class="col-md-2 pt-4">
+                            <h5 class="card-title"> </h5>
+                            <div class="form-group">
+                               
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-lg-2 pt-4">
+                            <h5 class="card-title"> </h5>
+                            
+                            <div class="form-group" style="width: 90%;" >
+                                
+                            </div>
+                        </div>
+                    </div>
+                   
+                    
+                   
+                    
+                </div>
+            </div>
+        </div>
+        <!-- Cierre card -->
+        <div class="row">
+        </div>
+    </form>
+</div>

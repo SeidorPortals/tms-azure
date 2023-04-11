@@ -1,0 +1,42 @@
+<div class="wrapper">
+    <ui5-bar design="Header">
+        <h3 class="card-title" slot="startContent">Factoring Company </h3>
+    </ui5-bar>
+    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+        <ui5-input id="searchInput" slot="endContent"  (change)="search($event)" placeholder="Search by Factoring Company..." style="width: 75%">
+            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+        </ui5-input>
+        <ui5-button icon="add" design="Transparent" tooltip="Create New Factoring Company" slot="endContent"
+            routerLink="/new-factoringcompany/.!">New</ui5-button>
+    </ui5-bar>
+    <div class="body" >
+        <form>
+            <ui5-table class="demo-table" id="table">
+                <!-- Columns -->
+                <ng-container *ngFor="let column of columns">
+                    <ui5-table-column *ngIf="column.watch == null" slot="columns" >
+                        <span style="line-height: 1.4rem"> {{column.title}} </span>
+                    </ui5-table-column>
+                </ng-container>
+
+                <ui5-table-row *ngFor="let item of list"  class="ui-table-row-root">
+                    <ng-container *ngFor="let column of columns">
+                        <ui5-table-cell *ngIf="column.watch == null">
+                            <ng-container *ngIf="column.key != null && column.key.length > 0; else sinKey">
+                                <span *ngIf="column.type === 'TEXT' || column.type === 'DATE'"> {{  item[column.key] }}  </span>
+                                <span  *ngIf="column.type === 'NUMBER'">  {{  item[column.key] | number: '1.2' }}  </span>
+                            </ng-container>
+                            <ng-template #sinKey>
+                                <div *ngIf="column.title === 'Actions'">
+                                    <ui5-button icon="edit" design="Transparent" [routerLink]="['./../new-factoringcompany', item['FACTORINGCOMPANYID']]">
+                                    </ui5-button>
+                                </div>
+                                <span></span>
+                            </ng-template>
+                        </ui5-table-cell>
+                    </ng-container>
+                </ui5-table-row>
+            </ui5-table>
+        </form>
+    </div>
+</div>

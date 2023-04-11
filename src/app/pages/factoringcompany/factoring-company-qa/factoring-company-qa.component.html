@@ -1,0 +1,125 @@
+<div class="row">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        crossorigin="anonymous">
+    <form [formGroup]="addForm" (ngSubmit)="actionSave()" autocomplete="off">
+        <div class="col-lg">
+            <div class="card card-user">
+                <div class="card-header">
+                    <ui5-bar design="Trailer">
+                        <h3 class="card-title" slot="startContent">Factoring Company </h3>
+                        <!-- <app-btn-status *ngIf="watchChangeEstatus" [numberSelected]="numberStatus" (statusSelected)="changeStatus($event)" style="margin-top:5px;padding: 0px;" slot="endContent">
+                        </app-btn-status> -->
+                        <ui5-button icon="complete" tooltip="Save and Close" slot="endContent"
+                            (click)="actionSave(true)" [disabled]="addForm.invalid">Save and Close
+                        </ui5-button>
+                        <ui5-button icon="save" tooltip="Save" slot="endContent" type="submit" submits="true"
+                            [disabled]="addForm.invalid">Save
+                        </ui5-button>
+                        <ui5-button icon="cancel" tooltip="Cancel" slot="endContent"
+                            routerLink="./../../factoringcompany">Cancel
+                        </ui5-button>
+                    </ui5-bar>
+                    <h6 class="pl-3 card-title">Status: </h6>
+                </div>
+                <div class="card-body">
+                    <div class="form-row">
+                        <div class="col-md-5">
+                            <h5 class="card-title">General Information</h5>
+                            <div class="form-group col-md-9">
+                                <div class="pl-2">
+                                    <label class="label" for="NAME"> Name<label
+                                            class="text-danger font-weight-bolder">*</label></label>
+                                    <input class="form-control" type="text" formControlName="NAME" />
+                                    <span *ngIf="validarcampos('NAME')" class="form-text text-danger">Name
+                                        Mandatory</span>
+                                </div>
+                                <div class="form-row pl-2 pb-1">
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 col-xl-6">
+                                        <label class="label" for="ADVANCEPERCENT"> Advance Percent</label>
+                                        <input class="form-control" type="text" formControlName="ADVANCEPERCENT" />
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 col-xl-6">
+                                        <label class="label" for="FEEPERCENT"> Fee Percent</label>
+                                        <input class="form-control" type="text" formControlName="FEEPERCENT" />
+                                    </div>
+                                </div>
+                                <div class="form-row pl-2 pb-1">
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 col-xl-6">
+                                        <label class="label" for="WIRETRANSFERPRICE"> Wire Transfer Price</label>
+                                        <input class="form-control" type="text" formControlName="WIRETRANSFERPRICE" />
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6 col-xl-6">
+                                        <label class="label" for="CONTACT"> Contact</label>
+                                        <input class="form-control" type="text" formControlName="CONTACT" />
+                                    </div>
+                                </div>
+
+                                <div class="pl-2">
+                                    <label class="label" for="INVOICELEGEND"> Invoice Legend </label>
+                                    <textarea rows="5" nz-input formControlName="INVOICELEGEND"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <h5 class="card-title">Address </h5>
+                            <div class="form-group col-md-9">
+
+                                <div class="form-row pb-1">
+                                    <div class="col-md-5">
+                                        <label>House Number <label
+                                                class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control address-inp" placeholder="House Number"
+                                            formControlName="HOUSENUMBER">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <label>Street <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control address-inp" placeholder="Street"
+                                            formControlName="STREET">
+                                    </div>
+                                </div>
+                                <div class="pl-0 pb-1">
+                                    <label>Address Line 1</label>
+                                    <input type="text" class="form-control address-inp" placeholder="Address"
+                                        formControlName="ADDRESS">
+                                </div>
+                                <div class="form-row pb-1">
+                                    <div class="col-md-5">
+                                        <label>City <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control address-inp" placeholder=" City"
+                                            formControlName="CITY">
+                                    </div>
+                                    <div class="col-sm-3 ">
+                                        <label>State <label class="text-danger font-weight-bolder">*</label></label>
+                                        <!-- <input type="text" class="form-control address-inp" placeholder=" State" formControlName="STATE"> -->
+                                        <!-- <select type="text" class="custom-select input-fi" placeholder="Select Customer" formControlName="STATE">
+                                                <option *ngFor="let region of RegionList" [value]="region.name">({{region.name}})
+                                                </option>
+                                            </select> -->
+                                        <nz-select class="form-control pt-0 pl-0 pb-0" [style]="{'width' : '100%'}"
+                                            nzBorderless nzShowSearch nzAllowClear nzPlaceHolder="Type to search..."
+                                            nzSize="large" formControlName="STATE">
+                                            <nz-option *ngFor="let states of RegionList" [nzLabel]="states['code']"
+                                                [nzValue]="states['code']"></nz-option>
+                                        </nz-select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label>Zip <label class="text-danger font-weight-bolder">*</label></label>
+                                        <input type="text" class="form-control address-inp" placeholder="ZIP"
+                                            formControlName="ZIP">
+                                    </div>
+                                </div>
+                                <div class="col-md-5 pl-0 pt-1">
+                                    <label for="celular">Celular</label>
+                                    <input id="celular" type="tel" class="form-control address-inp" placeholder="PHONE"
+                                        formControlName="PHONE">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,59 @@
+<!-- Header -->
+<div class="wrapper">
+    <ui5-bar design="Header">
+        <h3 class="card-title" slot="startContent">Roles </h3>
+
+    </ui5-bar>
+    <ui5-bar design="Header" style="background-color: #f7f7f7;">
+        <ui5-input id="searchInput" slot="endContent" placeholder="Search by Role..." style="width: 75%">
+            <ui5-icon id="searchIcon" slot="icon" name="search"></ui5-icon>
+        </ui5-input>
+        <ui5-button icon="add" design="Transparent" tooltip="Create New Role" slot="endContent" routerLink="/new-role/.!">New</ui5-button>
+
+    </ui5-bar>
+    <div class="body">
+        <ui5-table class="demo-table" no-data-text="No Data" id="table">
+            <!-- Columns -->
+
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Role ID</span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" style="width: 12rem">
+                <span style="line-height: 1.4rem">Role Name</span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" style="width: 6rem">
+                <span style="line-height: 1.4rem">Role Status</span>
+            </ui5-table-column>
+            <ui5-table-column slot="columns" style="width: 6rem">
+                <span style="line-height: 1.4rem">Actions</span>
+            </ui5-table-column>     
+
+
+            <ui5-table-row *ngFor="let role of ObjList; let i = index" class="ui-table-row-root">
+                <ui5-table-cell slot="default">
+                    <span>{{role.ROLE_ID}}</span>
+                </ui5-table-cell>
+
+                <ui5-table-cell slot="default">
+                    <span>
+                        {{role.ROLE_NAME}}</span>
+                </ui5-table-cell>
+
+                <ui5-table-cell slot="default">
+                    <span>
+                        {{role.ROLE_STATUS}}</span>
+                </ui5-table-cell>
+               
+
+
+                <ui5-button icon="edit" design="Transparent" [routerLink]="['/new-role', role.ROLE_ID]">
+                </ui5-button>
+
+
+
+
+            </ui5-table-row>
+
+        </ui5-table>
+    </div>
+</div>

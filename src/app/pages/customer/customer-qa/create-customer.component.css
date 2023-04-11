@@ -1,0 +1,80 @@
+.input-fi {
+    height: 2rem;
+    width: 80%;
+}
+
+.address-inp {
+    height: 2rem;
+}
+
+.date-inp {
+    height: 2rem;
+    width: 47%;
+}
+
+.shadow-textarea textarea.form-control::placeholder {
+    font-weight: 300;
+}
+
+.shadow-textarea textarea.form-control {
+    padding-left: 0.8rem;
+}
+
+.text-input-group {
+    border-left:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-right:  1px solid #ced4da;
+    background-color: #f2f2f2;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top-left-radius: 0.25rem;
+    border-bottom-left-radius: 0.25rem;
+    margin: 0px; 
+    font-size: 13px;
+}
+
+  .btn-input-group {
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    background-color: #ffff;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-group:hover{
+    border-right:  1px solid #ced4da;
+    border-top:  1px solid #ced4da;
+    border-bottom:  1px solid #ced4da;
+    border-left: none;
+    border-top-right-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+}
+
+.btn-input-icon:hover{
+    color: #0854a0;
+}
+
+.btn-select{
+    background-color: #ffffff; 
+    border: none;
+    color: #787a7d;
+    text-decoration: none;
+}
+
+.btn-select:hover{
+    color: #2367aa;
+    text-decoration: underline;
+}
+
+.btn-select-icon:hover{
+    color: #2367aa;
+}
